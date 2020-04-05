@@ -4,7 +4,7 @@ services:
 
 variables:
   DOCKER_DRIVER: overlay
-  HEROKU_APP_NAME: <APP_NAME>
+  HEROKU_APP_NAME: learn-with-pely
   HEROKU_REGISTRY_IMAGE: registry.heroku.com/${HEROKU_APP_NAME}/web
 
 stages:
