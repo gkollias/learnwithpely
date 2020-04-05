@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-10">
-        <h1>Books</h1>
+        <h1>Books test</h1>
         <hr><br><br>
         <alert :message=message v-if="showMessage"></alert>
         <button type="button" class="btn btn-success btn-sm" v-b-modal.book-modal>Add Book</button>
@@ -149,7 +149,7 @@ export default {
   },
   methods: {
     getBooks() {
-      const path = 'http://localhost:5000/books';
+      const path = '/books';
       axios.get(path)
         .then((res) => {
           this.books = res.data.books;
@@ -160,7 +160,7 @@ export default {
         });
     },
     addBook(payload) {
-      const path = 'http://localhost:5000/books';
+      const path = '/books';
       axios.post(path, payload)
         .then(() => {
           this.getBooks();
@@ -216,7 +216,7 @@ export default {
       this.updateBook(payload, this.editForm.id);
     },
     updateBook(payload, bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+      const path = `/books/${bookID}`;
       axios.put(path, payload)
         .then(() => {
           this.getBooks();
@@ -236,7 +236,7 @@ export default {
       this.getBooks(); // why?
     },
     removeBook(bookID) {
-      const path = `http://localhost:5000/books/${bookID}`;
+      const path = `/books/${bookID}`;
       axios.delete(path)
         .then(() => {
           this.getBooks();
