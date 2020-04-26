@@ -1,4 +1,4 @@
-FROM node:11.12.0-alpine as build-vue
+FROM node:11.12.0-alpine as learn-with-pely
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY ./client/package*.json ./
@@ -17,7 +17,7 @@ RUN apk update && apk add --no-cache python3 && \
     if [[ ! -e /usr/bin/python ]]; then ln -sf /usr/bin/python3 /usr/bin/python; fi && \
     rm -r /root/.cache
 RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
-COPY --from=build-vue /app/dist /usr/share/nginx/html
+COPY --from=learn-with-pely /app/dist /usr/share/nginx/html
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./server/requirements.txt ./
 RUN pip install -r requirements.txt

@@ -1,29 +1,11 @@
 import uuid
+import os
 
 from flask import Flask, jsonify, request
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_marshmallow import Marshmallow
 
-
-BOOKS = [
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'On the Road',
-        'author': 'Jack Kerouac',
-        'read': True
-    },
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'Harry Potter and the Philosopher\'s Stone',
-        'author': 'J. K. Rowling',
-        'read': False
-    },
-    {
-        'id': uuid.uuid4().hex,
-        'title': 'Green Eggs and Ham',
-        'author': 'Dr. Seuss',
-        'read': True
-    }
-]
 
 # configuration
 DEBUG = True
@@ -32,17 +14,55 @@ DEBUG = True
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+db = SQLAlchemy(app)
+ma = Marshmallow(app)
+
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
+class QuestionType(db.Model):
+    __tablename__ = 'question_type'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True)
+    children = db.relationship("Question")
 
-def remove_book(book_id):
-    for book in BOOKS:
-        if book['id'] == book_id:
-            BOOKS.remove(book)
-            return True
-    return False
+    def __init__(self, name):
+        self.name = name
 
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
+
+class Question(db.Model):
+    __tablename__ = 'question'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    question = db.Column(db.String(500), unique=True)
+    question_type_id = db.Column(db.Integer, db.ForeignKey('question_type.id'))
+    answer = db.Column(db.JSON)
+    image_url = db.Column(db.String(200))
+    created_by = db.Column(db.String(200))
+    created_date = db.Column(db.DateTime)
+    updated_by = db.Column(db.String(200))
+    updated_date = db.Column(db.DateTime)
+
+    def __init__(self, question, question_type, answer, image_url, created_by, created_date, updated_by, updated_date):
+        self.question = question
+        self.question_type = question_type
+        self.answer = answer
+        self.image_url = image_url
+        self.created_by = created_by
+        self.created_date = created_date
+        self.updated_by = updated_by
+        self.updated_date = updated_date
+
+    def __repr__(self):
+        return '<Question %r>' % self.question
+
+class QuestionSchema(ma.ModelSchema):
+    class Meta:
+        model = Question
 
 # sanity check route
 @app.route('/ping', methods=['GET'])
@@ -50,39 +70,46 @@ def ping_pong():
     return jsonify('pong!')
 
 
-@app.route('/books', methods=['GET', 'POST'])
-def all_books():
+@app.route('/questions', methods=['GET', 'POST'])
+def all_questions():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        BOOKS.append({
-            'id': uuid.uuid4().hex,
-            'title': post_data.get('title'),
-            'author': post_data.get('author'),
-            'read': post_data.get('read')
-        })
-        response_object['message'] = 'Book added!'
+        question = Question(post_data.get('question'), post_data.get('question_type'), post_data.get('answer'), \
+            post_data.get('image_url'), post_data.get('created_by'), post_data.get('created_date'), post_data.get('updated_by'), post_data.get('updated_date'))
+        db.session.add(question)
+        db.session.commit()
+        response_object['message'] = 'Question added!'
     else:
-        response_object['books'] = BOOKS
+        question_schema = QuestionSchema()
+        response_object['questions'] = question_schema.dump(Question.query.all(), many= True)
     return jsonify(response_object)
 
-
-@app.route('/books/<book_id>', methods=['PUT', 'DELETE'])
-def single_book(book_id):
+@app.route('/questions/<question_id>', methods=['GET', 'PUT', 'DELETE'])
+def single_question(question_id):
     response_object = {'status': 'success'}
+    question = Question.query.get(question_id)
+    if question == None:
+        response_object['message'] = 'Question does not exist!'
+        return jsonify(response_object)
+    if request.method == 'GET':
+        question_schema = QuestionSchema()
+        response_object['questions'] = question_schema.dump(question)
     if request.method == 'PUT':
         post_data = request.get_json()
-        remove_book(book_id)
-        BOOKS.append({
-            'id': uuid.uuid4().hex,
-            'title': post_data.get('title'),
-            'author': post_data.get('author'),
-            'read': post_data.get('read')
-        })
-        response_object['message'] = 'Book updated!'
+        question.question = post_data.get('question')
+        question.question_type = post_data.get('question_type')
+        question.answer = post_data.get('answer')
+        question.image_url = post_data.get('image_url')
+        question.updated_by = post_data.get('updated_by')
+        question.updated_date = post_data.get('updated_date')
+
+        db.session.commit()
+        response_object['message'] = 'Question updated!'
     if request.method == 'DELETE':
-        remove_book(book_id)
-        response_object['message'] = 'Book removed!'
+        db.session.delete(question)
+        db.session.commit()
+        response_object['message'] = 'Question removed!'
     return jsonify(response_object)
 
 
