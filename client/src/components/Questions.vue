@@ -29,11 +29,17 @@
               <td>{{ question.question }}</td>
               <td>{{ getQuestionTypeDescription(question.question_type_id) }}</td>
               <td>{{ getAnswerDescription(question.answer, 0) }}</td>
-              <td><input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 0)"/></td>
+              <td>
+                <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 0)"/>
+              </td>
               <td>{{ getAnswerDescription(question.answer, 1) }}</td>
-              <td><input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 1)"/></td>
+              <td>
+                <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 1)"/>
+              </td>
               <td>{{ getAnswerDescription(question.answer, 2) }}</td>
-              <td><input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 2)"/></td>
+              <td>
+                <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 2)"/>
+              </td>
               <td>
                 {{ question.image_url }}
                 <b-img v-bind="imageProps" :src="question.image_url"></b-img>
@@ -310,7 +316,7 @@ export default {
       this.addQuestionForm.answer_2_correct = false;
       this.addQuestionForm.answer_3_correct = false;
       this.addQuestionForm.image_url = '';
-      
+
       this.editQuestionForm.id = '';
       this.editQuestionForm.question = '';
       this.editQuestionForm.question_type_id = '';
