@@ -75,7 +75,7 @@ def ping_pong():
     return jsonify('pong!')
 
 
-@app.route('/questions', methods=['GET', 'POST'])
+@app.route('/api/questions', methods=['GET', 'POST'])
 def all_questions():
     response_object = {'status': 'success'}
     if request.method == 'POST':
@@ -90,7 +90,7 @@ def all_questions():
         response_object['questions'] = question_schema.dump(Question.query.all(), many= True)
     return jsonify(response_object)
 
-@app.route('/questions/<question_id>', methods=['GET', 'PUT', 'DELETE'])
+@app.route('/api/questions/<question_id>', methods=['GET', 'PUT', 'DELETE'])
 def single_question(question_id):
     response_object = {'status': 'success'}
     question = Question.query.get(question_id)
@@ -117,7 +117,7 @@ def single_question(question_id):
         response_object['message'] = 'Question removed!'
     return jsonify(response_object)
 
-@app.route('/questionTypes', methods=['GET'])
+@app.route('/api/questionTypes', methods=['GET'])
 def all_question_types():
     response_object = {'status': 'success'}
     question_type_schema = QuestionTypeSchema()

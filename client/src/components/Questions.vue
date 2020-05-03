@@ -246,7 +246,7 @@ export default {
       console.log(message);
     },
     getQuestions() {
-      const path = '/questions';
+      const path = '/api/questions';
       axios.get(path)
         .then((res) => {
           // eslint-disable-next-line no-console
@@ -260,7 +260,7 @@ export default {
         });
     },
     getQuestionTypes() {
-      const path = '/questionTypes';
+      const path = '/api/questionTypes';
       axios.get(path)
         .then((res) => {
           // eslint-disable-next-line no-console
@@ -287,7 +287,7 @@ export default {
       return !!ans;
     },
     addQuestion(payload) {
-      const path = '/questions';
+      const path = '/api/questions';
       axios.post(path, payload)
         .then(() => {
           this.getQuestions();
@@ -397,7 +397,7 @@ export default {
       this.initForm();
     },
     updateQuestion(payload, questionID) {
-      const path = `/questions/${questionID}`;
+      const path = `/api/questions/${questionID}`;
       axios.put(path, payload)
         .then(() => {
           this.getQuestions();
@@ -417,7 +417,7 @@ export default {
       this.getQuestions(); // why?
     },
     removeQuestion(questionID) {
-      const path = `/questions/${questionID}`;
+      const path = `/api/questions/${questionID}`;
       axios.delete(path)
         .then(() => {
           this.getQuestions();
