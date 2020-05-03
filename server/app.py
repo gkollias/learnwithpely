@@ -47,9 +47,9 @@ class Question(db.Model):
     updated_by = db.Column(db.String(200))
     updated_date = db.Column(db.DateTime)
 
-    def __init__(self, question, question_type, answer, image_url, created_by, created_date, updated_by, updated_date):
+    def __init__(self, question, question_type_id, answer, image_url, created_by, created_date, updated_by, updated_date):
         self.question = question
-        self.question_type = question_type
+        self.question_type_id = question_type_id
         self.answer = answer
         self.image_url = image_url
         self.created_by = created_by
@@ -63,6 +63,11 @@ class Question(db.Model):
 class QuestionSchema(ma.ModelSchema):
     class Meta:
         model = Question
+        include_fk = True
+
+class QuestionTypeSchema(ma.ModelSchema):
+    class Meta:
+        model = QuestionType
 
 # sanity check route
 @app.route('/ping', methods=['GET'])
@@ -75,7 +80,7 @@ def all_questions():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        question = Question(post_data.get('question'), post_data.get('question_type'), post_data.get('answer'), \
+        question = Question(post_data.get('question'), post_data.get('question_type_id'), post_data.get('answer'), \
             post_data.get('image_url'), post_data.get('created_by'), post_data.get('created_date'), post_data.get('updated_by'), post_data.get('updated_date'))
         db.session.add(question)
         db.session.commit()
@@ -98,7 +103,7 @@ def single_question(question_id):
     if request.method == 'PUT':
         post_data = request.get_json()
         question.question = post_data.get('question')
-        question.question_type = post_data.get('question_type')
+        question.question_type_id = post_data.get('question_type_id')
         question.answer = post_data.get('answer')
         question.image_url = post_data.get('image_url')
         question.updated_by = post_data.get('updated_by')
@@ -110,6 +115,13 @@ def single_question(question_id):
         db.session.delete(question)
         db.session.commit()
         response_object['message'] = 'Question removed!'
+    return jsonify(response_object)
+
+@app.route('/questionTypes', methods=['GET'])
+def all_question_types():
+    response_object = {'status': 'success'}
+    question_type_schema = QuestionTypeSchema()
+    response_object['question_types'] = question_type_schema.dump(QuestionType.query.all(), many= True)
     return jsonify(response_object)
 
 
