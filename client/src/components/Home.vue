@@ -1,56 +1,63 @@
 <template>
-  <div class="hello">
+  <div>
+    <b-navbar variant='info' type='light' fixed='top' sticky>
+      <b-navbar-brand tag='h1' class='mb-0'>Learn with Pely</b-navbar-brand>
+      <b-navbar-nav class='ml-auto'>
+        <b-nav-item-dropdown text='User' right>
+          <b-dropdown-item href='#'>Account</b-dropdown-item>
+          <b-dropdown-item href='#'>Settings</b-dropdown-item>
+        </b-nav-item-dropdown>
+      </b-navbar-nav>
+    </b-navbar>
     <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
+    <div class='d-flex flex-wrap justify-content-between align-content-center ml-auto'>
+      <question id='1' />
+      <question id='2' />
+      <question id='3' />
+      <question id='4' />
+      <question id='5' />
+    </div>
     <h3>Ecosystem</h3>
     <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
+      <li><a href='https://router.vuejs.org' target='_blank' rel='noopener'>vue-router</a></li>
+      <li><a href='https://vuex.vuejs.org' target='_blank' rel='noopener'>vuex</a></li>
+      <li>
+        <a href='https://github.com/vuejs/vue-devtools#vue-devtools' target='_blank' rel='noopener'
+          >vue-devtools</a
+        >
+      </li>
+      <li><a href='https://vue-loader.vuejs.org' target='_blank' rel='noopener'>vue-loader</a></li>
+      <li>
+        <a href='https://github.com/vuejs/awesome-vue' target='_blank' rel='noopener'
+          >awesome-vue</a
+        >
+      </li>
     </ul>
   </div>
 </template>
 
 <script>
+import Vue from 'vue';
+import Vuex from 'vuex';
+import Question from './Question.vue';
+
+Vue.use(Vuex);
+
 export default {
   name: 'Home',
   props: {
     msg: String,
   },
+  components: {
+    question: Question,
+  },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- Add 'scoped' attribute to limit CSS to this component only -->
 <style scoped>
 h3 {
   margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
 }
 a {
   color: #42b983;

@@ -14,6 +14,7 @@
             <tr>
               <th scope="col">Question</th>
               <th scope="col">Type</th>
+              <th scope="col">Class</th>
               <th scope="col">Answer 1</th>
               <th scope="col">Correct?</th>
               <th scope="col">Answer 2</th>
@@ -28,6 +29,7 @@
             <tr v-for="(question, index) in questions" :key="index">
               <td>{{ question.question }}</td>
               <td>{{ getQuestionTypeDescription(question.question_type_id) }}</td>
+              <td>{{ getQuestionClassDescription(question.question_class_id) }}</td>
               <td>{{ getAnswerDescription(question.answer, 0) }}</td>
               <td>
                 <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 0)"/>
@@ -100,6 +102,20 @@
             </option>
           </b-form-select>
         </b-form-group>
+        <b-form-group id="form-question-class-group"
+                      label="Question Class:"
+                      label-for="form-question-class-input">
+          <b-form-select
+            id="form-question-class-input"
+            v-model="addQuestionForm.question_class_id"
+            required
+            placeholder="Enter question class"
+          >
+          <option v-for="qt in questionClasses"
+            :value="qt.id" :key="qt.id">{{ qt.name }}
+            </option>
+          </b-form-select>
+        </b-form-group>
         <b-form-group id="form-answer-group"
                       label="Answer:"
                       label-for="form-answer-input">
@@ -168,6 +184,20 @@
             </option>
           </b-form-select>
         </b-form-group>
+        <b-form-group id="form-question-class-group"
+                      label="Question Class:"
+                      label-for="form-question-class-input">
+          <b-form-select
+            id="form-question-class-input"
+            v-model="editQuestionForm.question_class_id"
+            required
+            placeholder="Enter question class"
+          >
+          <option v-for="qt in questionClasses"
+            :value="qt.id" :key="qt.id">{{ qt.name }}
+            </option>
+          </b-form-select>
+        </b-form-group>
         <b-form-group id="form-answer-group"
                       label="Answer:"
                       label-for="form-answer-input">
@@ -220,6 +250,7 @@ export default {
     return {
       questions: [],
       questionTypes: [],
+      questionClasses: [],
       addQuestionForm: {
         question: '',
         question_type_id: '',
@@ -278,8 +309,25 @@ export default {
           console.error(error);
         });
     },
+    getQuestionClasses() {
+      const path = '/api/questionClasses';
+      axios.get(path)
+        .then((res) => {
+          // eslint-disable-next-line no-console
+          this.log(JSON.stringify(res.data));
+          this.questionClasses = res.data.question_classes;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
     getQuestionTypeDescription(id) {
       const qt = this.questionTypes.find(x => x.id === id);
+      return qt ? qt.name : '';
+    },
+    getQuestionClassDescription(id) {
+      const qt = this.questionClasses.find(x => x.id === id);
       return qt ? qt.name : '';
     },
     getAnswerDescription(answer, serialNumber) {
@@ -309,6 +357,7 @@ export default {
     initForm() {
       this.addQuestionForm.question = '';
       this.addQuestionForm.question_type_id = '';
+      this.addQuestionForm.question_class_id = '';
       this.addQuestionForm.answer_1 = '';
       this.addQuestionForm.answer_2 = '';
       this.addQuestionForm.answer_3 = '';
@@ -320,6 +369,7 @@ export default {
       this.editQuestionForm.id = '';
       this.editQuestionForm.question = '';
       this.editQuestionForm.question_type_id = '';
+      this.editQuestionForm.question_class_id = '';
       this.editQuestionForm.answer_1 = '';
       this.editQuestionForm.answer_2 = '';
       this.editQuestionForm.answer_3 = '';
@@ -344,6 +394,7 @@ export default {
       const payload = {
         question: this.addQuestionForm.question,
         question_type_id: this.addQuestionForm.question_type_id,
+        question_class_id: this.addQuestionForm.question_class_id,
         answer,
         image_url: this.addQuestionForm.image_url,
         created_by: 'admin',
@@ -391,6 +442,7 @@ export default {
       const payload = {
         question: this.editQuestionForm.question,
         question_type_id: this.editQuestionForm.question_type_id,
+        question_class_id: this.editQuestionForm.question_class_id,
         answer,
         image_url: this.editQuestionForm.image_url,
         created_by: 'admin',
@@ -459,6 +511,7 @@ export default {
   },
   created() {
     this.getQuestionTypes();
+    this.getQuestionClasses();
     this.getQuestions();
   },
 };
