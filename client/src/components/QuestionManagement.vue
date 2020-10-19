@@ -43,7 +43,7 @@
                 <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 2)"/>
               </td>
               <td>
-                {{ question.image_url }}
+                <!-- {{ question.image_url }} -->
                 <b-img v-bind="imageProps" :src="question.image_url"></b-img>
                 <!-- <div>
                   Icons made by
