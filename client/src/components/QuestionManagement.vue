@@ -13,7 +13,9 @@
           <thead>
             <tr>
               <th scope="col">Question</th>
-              <th scope="col">Type</th>
+              <th scope="col">Category</th>
+              <th scope="col">Subcategory</th>
+              <th scope="col">Chapter</th>
               <th scope="col">Class</th>
               <th scope="col">Answer 1</th>
               <th scope="col">Correct?</th>
@@ -28,7 +30,9 @@
           <tbody>
             <tr v-for="(question, index) in questions" :key="index">
               <td>{{ question.question }}</td>
-              <td>{{ getQuestionTypeDescription(question.question_type_id) }}</td>
+              <td>{{ getQuestionCategoryDescription(question.question_category_id) }}</td>
+              <td>{{ getQuestionSubcategoryDescription(question.question_subcategory_id) }}</td>
+              <td>{{ question.question_chapter }}</td>
               <td>{{ getQuestionClassDescription(question.question_class_id) }}</td>
               <td>{{ getAnswerDescription(question.answer, 0) }}</td>
               <td>
@@ -88,19 +92,43 @@
                         placeholder="Enter question">
           </b-form-input>
         </b-form-group>
-        <b-form-group id="form-question-type-group"
-                      label="Question Type:"
-                      label-for="form-question-type-input">
+        <b-form-group id="form-question-category-group"
+                      label="Question Category:"
+                      label-for="form-question-category-input">
           <b-form-select
-            id="form-question-type-input"
-            v-model="addQuestionForm.question_type_id"
+            id="form-question-category-input"
+            v-model="addQuestionForm.question_category_id"
             required
-            placeholder="Enter question type"
+            placeholder="Enter question category"
           >
-          <option v-for="qt in questionTypes"
-            :value="qt.id" :key="qt.id">{{ qt.name }}
+          <option v-for="qc in questionCategories"
+            :value="qc.id" :key="qc.id">{{ qc.name }}
             </option>
           </b-form-select>
+        </b-form-group>
+        <b-form-group id="form-question-subcategory-group"
+                      label="Question Subcategory:"
+                      label-for="form-question-subcategory-input">
+          <b-form-select
+            id="form-question-subcategory-input"
+            v-model="addQuestionForm.question_subcategory_id"
+            required
+            placeholder="Enter question subcategory"
+          >
+          <option v-for="qs in questionSubcategories"
+            :value="qs.id" :key="qs.id">{{ qs.name }}
+            </option>
+          </b-form-select>
+        </b-form-group>
+        <b-form-group id="form-chapter-group"
+                    label="Chapter:"
+                    label-for="form-chapter-input">
+          <b-form-input id="form-chapter-input"
+                        type="text"
+                        v-model="addQuestionForm.chapter"
+                        required
+                        placeholder="Enter chapter">
+          </b-form-input>
         </b-form-group>
         <b-form-group id="form-question-class-group"
                       label="Question Class:"
@@ -170,19 +198,43 @@
                         placeholder="Enter question">
           </b-form-input>
         </b-form-group>
-        <b-form-group id="form-question-type-group"
-                      label="Question Type:"
-                      label-for="form-question-type-input">
+        <b-form-group id="form-question-category-group"
+                      label="Question Category:"
+                      label-for="form-question-category-input">
           <b-form-select
-            id="form-question-type-input"
-            v-model="editQuestionForm.question_type_id"
+            id="form-question-category-input"
+            v-model="editQuestionForm.question_category_id"
             required
-            placeholder="Enter question type"
+            placeholder="Enter question category"
           >
-          <option v-for="qt in questionTypes"
-            :value="qt.id" :key="qt.id">{{ qt.name }}
+          <option v-for="qc in questionCategories"
+            :value="qc.id" :key="qc.id">{{ qc.name }}
             </option>
           </b-form-select>
+        </b-form-group>
+        <b-form-group id="form-question-subcategory-group"
+                      label="Question Subcategory:"
+                      label-for="form-question-subcategory-input">
+          <b-form-select
+            id="form-question-subcategory-input"
+            v-model="editQuestionForm.question_subcategory_id"
+            required
+            placeholder="Enter question subcategory"
+          >
+          <option v-for="qs in questionSubcategories"
+            :value="qs.id" :key="qs.id">{{ qs.name }}
+            </option>
+          </b-form-select>
+        </b-form-group>
+        <b-form-group id="form-chapter-group"
+                    label="Chapter:"
+                    label-for="form-chapter-input">
+          <b-form-input id="form-chapter-input"
+                        type="text"
+                        v-model="editQuestionForm.chapter"
+                        required
+                        placeholder="Enter chapter">
+          </b-form-input>
         </b-form-group>
         <b-form-group id="form-question-class-group"
                       label="Question Class:"
@@ -249,11 +301,15 @@ export default {
   data() {
     return {
       questions: [],
-      questionTypes: [],
+      questionCategories: [],
+      questionSubcategories: [],
       questionClasses: [],
       addQuestionForm: {
         question: '',
-        question_type_id: '',
+        question_category_id: '',
+        question_subcategory_id: '',
+        chapter: '',
+        class_id: '',
         answers: [],
       },
       message: '',
@@ -261,7 +317,10 @@ export default {
       editQuestionForm: {
         id: '',
         question: '',
-        question_type_id: '',
+        question_category_id: '',
+        question_subcategory_id: '',
+        chapter: '',
+        class_id: '',
         answers: [],
       },
       imageProps: {
@@ -296,13 +355,26 @@ export default {
           console.error(error);
         });
     },
-    getQuestionTypes() {
-      const path = '/api/questionTypes';
+    getQuestionCategories() {
+      const path = '/api/questionCategories';
       axios.get(path)
         .then((res) => {
           // eslint-disable-next-line no-console
           this.log(JSON.stringify(res.data));
-          this.questionTypes = res.data.question_types;
+          this.questionCategories = res.data.question_categories;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+    getQuestionSubcategories() {
+      const path = '/api/questionSubcategories';
+      axios.get(path)
+        .then((res) => {
+          // eslint-disable-next-line no-console
+          this.log(JSON.stringify(res.data));
+          this.questionSubcategories = res.data.question_subcategories;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -322,8 +394,12 @@ export default {
           console.error(error);
         });
     },
-    getQuestionTypeDescription(id) {
-      const qt = this.questionTypes.find(x => x.id === id);
+    getQuestionCategoryDescription(id) {
+      const qt = this.questionCategories.find(x => x.id === id);
+      return qt ? qt.name : '';
+    },
+    getQuestionSubcategoryDescription(id) {
+      const qt = this.questionSubcategories.find(x => x.id === id);
       return qt ? qt.name : '';
     },
     getQuestionClassDescription(id) {
@@ -356,7 +432,9 @@ export default {
     },
     initForm() {
       this.addQuestionForm.question = '';
-      this.addQuestionForm.question_type_id = '';
+      this.addQuestionForm.question_category_id = '';
+      this.addQuestionForm.question_subcategory_id = '';
+      this.addQuestionForm.question_chapter = '';
       this.addQuestionForm.question_class_id = '';
       this.addQuestionForm.answer_1 = '';
       this.addQuestionForm.answer_2 = '';
@@ -368,7 +446,9 @@ export default {
 
       this.editQuestionForm.id = '';
       this.editQuestionForm.question = '';
-      this.editQuestionForm.question_type_id = '';
+      this.editQuestionForm.question_category_id = '';
+      this.editQuestionForm.question_subcategory_id = '';
+      this.editQuestionForm.question_chapter = '';
       this.editQuestionForm.question_class_id = '';
       this.editQuestionForm.answer_1 = '';
       this.editQuestionForm.answer_2 = '';
@@ -393,7 +473,9 @@ export default {
 
       const payload = {
         question: this.addQuestionForm.question,
-        question_type_id: this.addQuestionForm.question_type_id,
+        question_category_id: this.addQuestionForm.question_category_id,
+        question_subcategory_id: this.addQuestionForm.question_subcategory_id,
+        question_chapter: this.addQuestionForm.question_chapter,
         question_class_id: this.addQuestionForm.question_class_id,
         answer,
         image_url: this.addQuestionForm.image_url,
@@ -441,7 +523,9 @@ export default {
 
       const payload = {
         question: this.editQuestionForm.question,
-        question_type_id: this.editQuestionForm.question_type_id,
+        question_category_id: this.editQuestionForm.question_category_id,
+        question_subcategory_id: this.editQuestionForm.question_subcategory_id,
+        question_chapter: this.editQuestionForm.question_chapter,
         question_class_id: this.editQuestionForm.question_class_id,
         answer,
         image_url: this.editQuestionForm.image_url,
@@ -510,7 +594,8 @@ export default {
     },
   },
   created() {
-    this.getQuestionTypes();
+    this.getQuestionCategories();
+    this.getQuestionSubcategories();
     this.getQuestionClasses();
     this.getQuestions();
   },

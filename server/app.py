@@ -22,8 +22,8 @@ ma = Marshmallow(app)
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
 
-class QuestionType(db.Model):
-    __tablename__ = 'question_type'
+class QuestionCategory(db.Model):
+    __tablename__ = 'question_category'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), unique=True)
     children = db.relationship("Question")
@@ -33,6 +33,21 @@ class QuestionType(db.Model):
 
     def __repr__(self):
         return '<Name %r>' % self.name
+
+class QuestionSubcategory(db.Model):
+    __tablename__ = 'question_subcategory'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True)
+    question_category_id = db.Column(db.Integer, db.ForeignKey('question_category.id'))
+
+    children = db.relationship("QuestionCategory")
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
 
 class QuestionClass(db.Model):
     __tablename__ = 'question_class'
@@ -50,7 +65,9 @@ class Question(db.Model):
     __tablename__ = 'question'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     question = db.Column(db.String(500), unique=True)
-    question_type_id = db.Column(db.Integer, db.ForeignKey('question_type.id'))
+    question_category_id = db.Column(db.Integer, db.ForeignKey('question_category.id'))
+    question_subcategory_id = db.Column(db.Integer, db.ForeignKey('question_subcategory.id'))
+    question_chapter = db.Column(db.Integer)
     question_class_id = db.Column(db.Integer, db.ForeignKey('question_class.id'))
     answer = db.Column(db.JSON)
     image_url = db.Column(db.String(500))
@@ -59,9 +76,11 @@ class Question(db.Model):
     updated_by = db.Column(db.String(200))
     updated_date = db.Column(db.DateTime)
 
-    def __init__(self, question, question_type_id, question_class_id, answer, image_url, created_by, created_date, updated_by, updated_date):
+    def __init__(self, question, question_category_id, question_subcategory_id, question_chapter, question_class_id, answer, image_url, created_by, created_date, updated_by, updated_date):
         self.question = question
-        self.question_type_id = question_type_id
+        self.question_category_id = question_category_id
+        self.question_subcategory_id = question_subcategory_id
+        self.question_chapter = question_chapter
         self.question_class_id = question_class_id
         self.answer = answer
         self.image_url = image_url
@@ -78,9 +97,13 @@ class QuestionSchema(ma.ModelSchema):
         model = Question
         include_fk = True
 
-class QuestionTypeSchema(ma.ModelSchema):
+class QuestionCategorySchema(ma.ModelSchema):
     class Meta:
-        model = QuestionType
+        model = QuestionCategory
+
+class QuestionSubcategorySchema(ma.ModelSchema):
+    class Meta:
+        model = QuestionSubcategory
 
 class QuestionClassSchema(ma.ModelSchema):
     class Meta:
@@ -97,8 +120,10 @@ def all_questions():
     response_object = {'status': 'success'}
     if request.method == 'POST':
         post_data = request.get_json()
-        question = Question(post_data.get('question'), post_data.get('question_type_id'), post_data.get('question_class_id'), post_data.get('answer'), \
-            post_data.get('image_url'), post_data.get('created_by'), post_data.get('created_date'), post_data.get('updated_by'), post_data.get('updated_date'))
+        question = Question(post_data.get('question'), post_data.get('question_category_id'), post_data.get('question_subcategory_id'),\
+                            post_data.get('question_chapter'), post_data.get('question_class_id'), post_data.get('answer'), \
+                            post_data.get('image_url'), post_data.get('created_by'), post_data.get('created_date'), post_data.get('updated_by'), \
+                            post_data.get('updated_date'))
         db.session.add(question)
         db.session.commit()
         response_object['message'] = 'Question added!'
@@ -120,7 +145,9 @@ def single_question(question_id):
     if request.method == 'PUT':
         post_data = request.get_json()
         question.question = post_data.get('question')
-        question.question_type_id = post_data.get('question_type_id')
+        question.question_category_id = post_data.get('question_category_id')
+        question.question_subcategory_id = post_data.get('question_subcategory_id')
+        question.question_chapter = post_data.get('question_chapter')
         question.question_class_id = post_data.get('question_class_id')
         question.answer = post_data.get('answer')
         question.image_url = post_data.get('image_url')
@@ -135,11 +162,18 @@ def single_question(question_id):
         response_object['message'] = 'Question removed!'
     return jsonify(response_object)
 
-@app.route('/api/questionTypes', methods=['GET'])
-def all_question_types():
+@app.route('/api/questionCategories', methods=['GET'])
+def all_question_categories():
     response_object = {'status': 'success'}
-    question_type_schema = QuestionTypeSchema()
-    response_object['question_types'] = question_type_schema.dump(QuestionType.query.all(), many= True)
+    question_category_schema = QuestionCategorySchema()
+    response_object['question_categories'] = question_category_schema.dump(QuestionCategory.query.all(), many= True)
+    return jsonify(response_object)
+
+@app.route('/api/questionSubcategories', methods=['GET'])
+def all_question_subcategories():
+    response_object = {'status': 'success'}
+    question_subcategory_schema = QuestionSubcategorySchema()
+    response_object['question_subcategories'] = question_subcategory_schema.dump(QuestionSubcategory.query.all(), many= True)
     return jsonify(response_object)
 
 @app.route('/api/questionClasses', methods=['GET'])
@@ -152,8 +186,8 @@ def all_question_classes():
 @app.route('/auth/login', methods=['POST'])
 def login():
     response_object = {'status': 'success'}
-    question_type_schema = QuestionTypeSchema()
-    response_object['question_types'] = question_type_schema.dump(QuestionType.query.all(), many= True)
+    question_categories_schema = QuestionCategorySchema()
+    response_object['question_categories'] = question_categories_schema.dump(QuestionCategory.query.all(), many= True)
     return jsonify(response_object)
 
 if __name__ == '__main__':
