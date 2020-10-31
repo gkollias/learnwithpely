@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import QuestionManagement from './components/QuestionManagement.vue';
+import ClassQuestion from './components/ClassQuestion.vue';
 import Home from './components/Home.vue';
 import Ping from './components/Ping.vue';
 
@@ -19,6 +20,11 @@ export default new Router({
       path: '/questionManagement',
       name: 'questionManagement',
       component: QuestionManagement,
+    },
+    {
+      path: '/classQuestion',
+      name: 'classQuestion',
+      component: ClassQuestion,
     },
     {
       path: '/ping',
