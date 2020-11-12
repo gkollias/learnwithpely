@@ -1,0 +1,4 @@
+export const SET_USER = 'SET_USER';
+export const SET_QUESTIONS = 'SET_QUESTIONS';
+export const SET_NEXT_QUESTION = 'SET_NEXT_QUESTION';
+export const SHOW_QUESTIONS = 'SHOW_QUESTIONS';
