@@ -162,6 +162,43 @@ def single_question(question_id):
         response_object['message'] = 'Question removed!'
     return jsonify(response_object)
 
+@app.route('/api/questions/category/<category_id>', methods=['GET'])
+def questions_by_category(category_id):
+    response_object = {'status': 'success'}
+    questions = Question.query.filter_by(question_category_id=category_id).all()
+    if questions == None:
+        response_object['message'] = 'Category does not exist!'
+        return jsonify(response_object)
+    if request.method == 'GET':
+        question_schema = QuestionSchema()
+        response_object['questions'] = question_schema.dump(questions, many=True)
+    return jsonify(response_object)
+
+@app.route('/api/questions/subcategory/<subcategory_id>', methods=['GET'])
+def questions_by_subcategory(subcategory_id):
+    response_object = {'status': 'success'}
+    questions = Question.query.filter_by(question_subcategory_id=subcategory_id).all()
+    if questions == None:
+        response_object['message'] = 'subCategory does not exist!'
+        return jsonify(response_object)
+    if request.method == 'GET':
+        question_schema = QuestionSchema()
+        response_object['questions'] = question_schema.dump(questions, many=True)
+    return jsonify(response_object)
+
+@app.route('/api/questions/class/<class_id>', methods=['GET'])
+def questions_by_class(class_id):
+    response_object = {'status': 'success'}
+    questions = Question.query.filter_by(question_class_id=class_id).all()
+    if questions == None:
+        response_object['message'] = 'class does not exist!'
+        return jsonify(response_object)
+    if request.method == 'GET':
+        question_schema = QuestionSchema()
+        response_object['questions'] = question_schema.dump(questions, many=True)
+    return jsonify(response_object)
+
+
 @app.route('/api/questionCategories', methods=['GET'])
 def all_question_categories():
     response_object = {'status': 'success'}
@@ -189,6 +226,20 @@ def login():
     question_categories_schema = QuestionCategorySchema()
     response_object['question_categories'] = question_categories_schema.dump(QuestionCategory.query.all(), many= True)
     return jsonify(response_object)
+
+@app.route('/api/managementAuthorization', methods=['POST'])
+def questionsManagement():
+    post_data = request.get_json()
+    user_id = post_data.get('user_id')
+    print(user_id)
+
+    authorized_users = ['gkollias13@gmail.com', 'pelagiakorre@gmail.com']
+    auth = False
+    if user_id in authorized_users:
+        auth = True
+    response_object = {'result':  auth}
+    return jsonify(response_object)
+
 
 if __name__ == '__main__':
     app.run()

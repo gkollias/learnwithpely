@@ -1,301 +1,307 @@
 <template>
   <div class="container">
-    <div class="row">
-      <div class="col-sm-10">
-        <h1>Questions Management</h1>
-        <hr><br><br>
-        <alert :message=message v-if="showMessage"></alert>
-        <button type="button" class="btn btn-success btn-sm" v-b-modal.question-modal>
-          Add Question
-        </button>
-        <br><br>
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Question</th>
-              <th scope="col">Category</th>
-              <th scope="col">Subcategory</th>
-              <th scope="col">Chapter</th>
-              <th scope="col">Class</th>
-              <th scope="col">Answer 1</th>
-              <th scope="col">Correct?</th>
-              <th scope="col">Answer 2</th>
-              <th scope="col">Correct?</th>
-              <th scope="col">Answer 3</th>
-              <th scope="col">Correct?</th>
-              <th scope="col">Image</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(question, index) in questions" :key="index">
-              <td>{{ question.question }}</td>
-              <td>{{ getQuestionCategoryDescription(question.question_category_id) }}</td>
-              <td>{{ getQuestionSubcategoryDescription(question.question_subcategory_id) }}</td>
-              <td>{{ question.question_chapter }}</td>
-              <td>{{ getQuestionClassDescription(question.question_class_id) }}</td>
-              <td>{{ getAnswerDescription(question.answer, 0) }}</td>
-              <td>
-                <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 0)"/>
-              </td>
-              <td>{{ getAnswerDescription(question.answer, 1) }}</td>
-              <td>
-                <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 1)"/>
-              </td>
-              <td>{{ getAnswerDescription(question.answer, 2) }}</td>
-              <td>
-                <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 2)"/>
-              </td>
-              <td>
-                <!-- {{ question.image_url }} -->
-                <b-img v-bind="imageProps" :src="question.image_url"></b-img>
-                <!-- <div>
-                  Icons made by
-                  <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>
-                  from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
-                </div> -->
-              </td>
-              <td>
-                <div class="btn-group" role="group">
-                  <button
-                          type="button"
-                          class="btn btn-warning btn-sm"
-                          v-b-modal.question-update-modal
-                          @click="editQuestion(question)">
-                      Update
-                  </button>
-                  <button
-                          type="button"
-                          class="btn btn-danger btn-sm"
-                          @click="onDeleteQuestion(question)">
-                      Delete
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <NavigationBar />
+    <div v-if="hasAccess">
+      <div class="row">
+        <div class="col-sm-10">
+          <h1>Questions Management</h1>
+          <hr><br><br>
+          <Alert :message=message v-if="showMessage"></Alert>
+          <button type="button" class="btn btn-success btn-sm" v-b-modal.question-modal>
+            Add Question
+          </button>
+          <br><br>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Question</th>
+                <th scope="col">Category</th>
+                <th scope="col">Subcategory</th>
+                <th scope="col">Chapter</th>
+                <th scope="col">Class</th>
+                <th scope="col">Answer 1</th>
+                <th scope="col">Correct?</th>
+                <th scope="col">Answer 2</th>
+                <th scope="col">Correct?</th>
+                <th scope="col">Answer 3</th>
+                <th scope="col">Correct?</th>
+                <th scope="col">Image</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(question, index) in questions" :key="index">
+                <td>{{ question.question }}</td>
+                <td>{{ getQuestionCategoryDescription(question.question_category_id) }}</td>
+                <td>{{ getQuestionSubcategoryDescription(question.question_subcategory_id) }}</td>
+                <td>{{ question.question_chapter }}</td>
+                <td>{{ getQuestionClassDescription(question.question_class_id) }}</td>
+                <td>{{ getAnswerDescription(question.answer, 0) }}</td>
+                <td>
+                  <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 0)"/>
+                </td>
+                <td>{{ getAnswerDescription(question.answer, 1) }}</td>
+                <td>
+                  <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 1)"/>
+                </td>
+                <td>{{ getAnswerDescription(question.answer, 2) }}</td>
+                <td>
+                  <input type="checkbox" disabled :checked="isAnswerCorrect(question.answer, 2)"/>
+                </td>
+                <td>
+                  <!-- {{ question.image_url }} -->
+                  <b-img v-bind="imageProps" :src="question.image_url"></b-img>
+                  <!-- <div>
+                    Icons made by
+                    <a href="https://www.flaticon.com/authors/good-ware" title="Good Ware">Good Ware</a>
+                    from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a>
+                  </div> -->
+                </td>
+                <td>
+                  <div class="btn-group" role="group">
+                    <button
+                            type="button"
+                            class="btn btn-warning btn-sm"
+                            v-b-modal.question-update-modal
+                            @click="editQuestion(question)">
+                        Update
+                    </button>
+                    <button
+                            type="button"
+                            class="btn btn-danger btn-sm"
+                            @click="onDeleteQuestion(question)">
+                        Delete
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-    <b-modal ref="addQuestionModal"
-            id="question-modal"
-            title="Add a new question"
-            hide-footer>
-      <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+      <b-modal ref="addQuestionModal"
+              id="question-modal"
+              title="Add a new question"
+              hide-footer>
+        <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+          <b-form-group id="form-question-group"
+                      label="Question:"
+                      label-for="form-question-input">
+            <b-form-input id="form-question-input"
+                          type="text"
+                          v-model="addQuestionForm.question"
+                          required
+                          placeholder="Enter question">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group id="form-question-category-group"
+                        label="Question Category:"
+                        label-for="form-question-category-input">
+            <b-form-select
+              id="form-question-category-input"
+              v-model="addQuestionForm.question_category_id"
+              required
+              placeholder="Enter question category"
+            >
+            <option v-for="qc in questionCategories"
+              :value="qc.id" :key="qc.id">{{ qc.name }}
+              </option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group id="form-question-subcategory-group"
+                        label="Question Subcategory:"
+                        label-for="form-question-subcategory-input">
+            <b-form-select
+              id="form-question-subcategory-input"
+              v-model="addQuestionForm.question_subcategory_id"
+              required
+              placeholder="Enter question subcategory"
+            >
+            <option v-for="qs in questionSubcategories"
+              :value="qs.id" :key="qs.id">{{ qs.name }}
+              </option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group id="form-chapter-group"
+                      label="Chapter:"
+                      label-for="form-chapter-input">
+            <b-form-input id="form-chapter-input"
+                          type="text"
+                          v-model="addQuestionForm.chapter"
+                          required
+                          placeholder="Enter chapter">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group id="form-question-class-group"
+                        label="Question Class:"
+                        label-for="form-question-class-input">
+            <b-form-select
+              id="form-question-class-input"
+              v-model="addQuestionForm.question_class_id"
+              required
+              placeholder="Enter question class"
+            >
+            <option v-for="qt in questionClasses"
+              :value="qt.id" :key="qt.id">{{ qt.name }}
+              </option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group id="form-answer-group"
+                        label="Answer:"
+                        label-for="form-answer-input">
+            <b-form-input id="form-answer-input-1"
+                          type="text"
+                          v-model="addQuestionForm.answer_1"
+                          required
+                          placeholder="Answer 1">
+            </b-form-input>
+            <b-form-checkbox v-model="addQuestionForm.answer_1_correct">Correct?</b-form-checkbox>
+            <br/>
+            <b-form-input id="form-answer-input-2"
+                          type="text"
+                          v-model="addQuestionForm.answer_2"
+                          required
+                          placeholder="Answer 2">
+            </b-form-input>
+            <b-form-checkbox v-model="addQuestionForm.answer_2_correct">Correct?</b-form-checkbox>
+            <br/>
+            <b-form-input id="form-answer-input-3"
+                          type="text"
+                          v-model="addQuestionForm.answer_3"
+                          placeholder="Answer 3">
+            </b-form-input>
+            <b-form-checkbox v-model="addQuestionForm.answer_3_correct">Correct?</b-form-checkbox>
+            <br/>
+            <b-form-input id="form-image-input"
+                          type="text"
+                          v-model="addQuestionForm.image_url"
+                          placeholder="Image URL">
+            </b-form-input>
+            <br/>
+          </b-form-group>
+          <b-button-group>
+            <b-button type="submit" variant="primary">Submit</b-button>
+            <b-button type="reset" variant="danger">Reset</b-button>
+          </b-button-group>
+        </b-form>
+      </b-modal>
+      <b-modal ref="editQuestionModal"
+              id="question-update-modal"
+              title="Update"
+              hide-footer>
+        <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
         <b-form-group id="form-question-group"
-                    label="Question:"
-                    label-for="form-question-input">
-          <b-form-input id="form-question-input"
-                        type="text"
-                        v-model="addQuestionForm.question"
-                        required
-                        placeholder="Enter question">
-          </b-form-input>
-        </b-form-group>
-        <b-form-group id="form-question-category-group"
-                      label="Question Category:"
-                      label-for="form-question-category-input">
-          <b-form-select
-            id="form-question-category-input"
-            v-model="addQuestionForm.question_category_id"
-            required
-            placeholder="Enter question category"
-          >
-          <option v-for="qc in questionCategories"
-            :value="qc.id" :key="qc.id">{{ qc.name }}
-            </option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group id="form-question-subcategory-group"
-                      label="Question Subcategory:"
-                      label-for="form-question-subcategory-input">
-          <b-form-select
-            id="form-question-subcategory-input"
-            v-model="addQuestionForm.question_subcategory_id"
-            required
-            placeholder="Enter question subcategory"
-          >
-          <option v-for="qs in questionSubcategories"
-            :value="qs.id" :key="qs.id">{{ qs.name }}
-            </option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group id="form-chapter-group"
-                    label="Chapter:"
-                    label-for="form-chapter-input">
-          <b-form-input id="form-chapter-input"
-                        type="text"
-                        v-model="addQuestionForm.chapter"
-                        required
-                        placeholder="Enter chapter">
-          </b-form-input>
-        </b-form-group>
-        <b-form-group id="form-question-class-group"
-                      label="Question Class:"
-                      label-for="form-question-class-input">
-          <b-form-select
-            id="form-question-class-input"
-            v-model="addQuestionForm.question_class_id"
-            required
-            placeholder="Enter question class"
-          >
-          <option v-for="qt in questionClasses"
-            :value="qt.id" :key="qt.id">{{ qt.name }}
-            </option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group id="form-answer-group"
-                      label="Answer:"
-                      label-for="form-answer-input">
-          <b-form-input id="form-answer-input-1"
-                        type="text"
-                        v-model="addQuestionForm.answer_1"
-                        required
-                        placeholder="Answer 1">
-          </b-form-input>
-          <b-form-checkbox v-model="addQuestionForm.answer_1_correct">Correct?</b-form-checkbox>
-          <br/>
-          <b-form-input id="form-answer-input-2"
-                        type="text"
-                        v-model="addQuestionForm.answer_2"
-                        required
-                        placeholder="Answer 2">
-          </b-form-input>
-          <b-form-checkbox v-model="addQuestionForm.answer_2_correct">Correct?</b-form-checkbox>
-          <br/>
-          <b-form-input id="form-answer-input-3"
-                        type="text"
-                        v-model="addQuestionForm.answer_3"
-                        placeholder="Answer 3">
-          </b-form-input>
-          <b-form-checkbox v-model="addQuestionForm.answer_3_correct">Correct?</b-form-checkbox>
-          <br/>
-          <b-form-input id="form-image-input"
-                        type="text"
-                        v-model="addQuestionForm.image_url"
-                        placeholder="Image URL">
-          </b-form-input>
-          <br/>
-        </b-form-group>
-        <b-button-group>
-          <b-button type="submit" variant="primary">Submit</b-button>
-          <b-button type="reset" variant="danger">Reset</b-button>
-        </b-button-group>
-      </b-form>
-    </b-modal>
-    <b-modal ref="editQuestionModal"
-            id="question-update-modal"
-            title="Update"
-            hide-footer>
-      <b-form @submit="onSubmitUpdate" @reset="onResetUpdate" class="w-100">
-      <b-form-group id="form-question-group"
-                    label="Question:"
-                    label-for="form-question-input">
-          <b-form-input id="form-question-input"
-                        type="text"
-                        v-model="editQuestionForm.question"
-                        required
-                        placeholder="Enter question">
-          </b-form-input>
-        </b-form-group>
-        <b-form-group id="form-question-category-group"
-                      label="Question Category:"
-                      label-for="form-question-category-input">
-          <b-form-select
-            id="form-question-category-input"
-            v-model="editQuestionForm.question_category_id"
-            required
-            placeholder="Enter question category"
-          >
-          <option v-for="qc in questionCategories"
-            :value="qc.id" :key="qc.id">{{ qc.name }}
-            </option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group id="form-question-subcategory-group"
-                      label="Question Subcategory:"
-                      label-for="form-question-subcategory-input">
-          <b-form-select
-            id="form-question-subcategory-input"
-            v-model="editQuestionForm.question_subcategory_id"
-            required
-            placeholder="Enter question subcategory"
-          >
-          <option v-for="qs in questionSubcategories"
-            :value="qs.id" :key="qs.id">{{ qs.name }}
-            </option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group id="form-chapter-group"
-                    label="Chapter:"
-                    label-for="form-chapter-input">
-          <b-form-input id="form-chapter-input"
-                        type="text"
-                        v-model="editQuestionForm.chapter"
-                        required
-                        placeholder="Enter chapter">
-          </b-form-input>
-        </b-form-group>
-        <b-form-group id="form-question-class-group"
-                      label="Question Class:"
-                      label-for="form-question-class-input">
-          <b-form-select
-            id="form-question-class-input"
-            v-model="editQuestionForm.question_class_id"
-            required
-            placeholder="Enter question class"
-          >
-          <option v-for="qt in questionClasses"
-            :value="qt.id" :key="qt.id">{{ qt.name }}
-            </option>
-          </b-form-select>
-        </b-form-group>
-        <b-form-group id="form-answer-group"
-                      label="Answer:"
-                      label-for="form-answer-input">
-          <b-form-input id="form-answer-input-1"
-                        type="text"
-                        v-model="editQuestionForm.answer_1"
-                        required
-                        placeholder="Answer 1">
-          </b-form-input>
-          <b-form-checkbox v-model="editQuestionForm.answer_1_correct">Correct?</b-form-checkbox>
-          <br/>
-          <b-form-input id="form-answer-input-2"
-                        type="text"
-                        v-model="editQuestionForm.answer_2"
-                        required
-                        placeholder="Answer 2">
-          </b-form-input>
-          <b-form-checkbox v-model="editQuestionForm.answer_2_correct">Correct?</b-form-checkbox>
-          <br/>
-          <b-form-input id="form-answer-input-3"
-                        type="text"
-                        v-model="editQuestionForm.answer_3"
-                        placeholder="Answer 3">
-          </b-form-input>
-          <b-form-checkbox v-model="editQuestionForm.answer_3_correct">Correct?</b-form-checkbox>
-          <br/>
-          <b-form-input id="form-image-input"
-                        type="text"
-                        v-model="editQuestionForm.image_url"
-                        placeholder="Image URL">
-          </b-form-input>
-          <br/>
-        </b-form-group>
-        <b-button-group>
-          <b-button type="submit" variant="primary">Update</b-button>
-          <b-button type="reset" variant="danger">Cancel</b-button>
-        </b-button-group>
-      </b-form>
-    </b-modal>
+                      label="Question:"
+                      label-for="form-question-input">
+            <b-form-input id="form-question-input"
+                          type="text"
+                          v-model="editQuestionForm.question"
+                          required
+                          placeholder="Enter question">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group id="form-question-category-group"
+                        label="Question Category:"
+                        label-for="form-question-category-input">
+            <b-form-select
+              id="form-question-category-input"
+              v-model="editQuestionForm.question_category_id"
+              required
+              placeholder="Enter question category"
+            >
+            <option v-for="qc in questionCategories"
+              :value="qc.id" :key="qc.id">{{ qc.name }}
+              </option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group id="form-question-subcategory-group"
+                        label="Question Subcategory:"
+                        label-for="form-question-subcategory-input">
+            <b-form-select
+              id="form-question-subcategory-input"
+              v-model="editQuestionForm.question_subcategory_id"
+              required
+              placeholder="Enter question subcategory"
+            >
+            <option v-for="qs in questionSubcategories"
+              :value="qs.id" :key="qs.id">{{ qs.name }}
+              </option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group id="form-chapter-group"
+                      label="Chapter:"
+                      label-for="form-chapter-input">
+            <b-form-input id="form-chapter-input"
+                          type="text"
+                          v-model="editQuestionForm.chapter"
+                          required
+                          placeholder="Enter chapter">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group id="form-question-class-group"
+                        label="Question Class:"
+                        label-for="form-question-class-input">
+            <b-form-select
+              id="form-question-class-input"
+              v-model="editQuestionForm.question_class_id"
+              required
+              placeholder="Enter question class"
+            >
+            <option v-for="qt in questionClasses"
+              :value="qt.id" :key="qt.id">{{ qt.name }}
+              </option>
+            </b-form-select>
+          </b-form-group>
+          <b-form-group id="form-answer-group"
+                        label="Answer:"
+                        label-for="form-answer-input">
+            <b-form-input id="form-answer-input-1"
+                          type="text"
+                          v-model="editQuestionForm.answer_1"
+                          required
+                          placeholder="Answer 1">
+            </b-form-input>
+            <b-form-checkbox v-model="editQuestionForm.answer_1_correct">Correct?</b-form-checkbox>
+            <br/>
+            <b-form-input id="form-answer-input-2"
+                          type="text"
+                          v-model="editQuestionForm.answer_2"
+                          required
+                          placeholder="Answer 2">
+            </b-form-input>
+            <b-form-checkbox v-model="editQuestionForm.answer_2_correct">Correct?</b-form-checkbox>
+            <br/>
+            <b-form-input id="form-answer-input-3"
+                          type="text"
+                          v-model="editQuestionForm.answer_3"
+                          placeholder="Answer 3">
+            </b-form-input>
+            <b-form-checkbox v-model="editQuestionForm.answer_3_correct">Correct?</b-form-checkbox>
+            <br/>
+            <b-form-input id="form-image-input"
+                          type="text"
+                          v-model="editQuestionForm.image_url"
+                          placeholder="Image URL">
+            </b-form-input>
+            <br/>
+          </b-form-group>
+          <b-button-group>
+            <b-button type="submit" variant="primary">Update</b-button>
+            <b-button type="reset" variant="danger">Cancel</b-button>
+          </b-button-group>
+        </b-form>
+      </b-modal>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import Alert from './Alert.vue';
+import NavigationBar from './NavigationBar.vue';
 
 export default {
   data() {
@@ -313,6 +319,7 @@ export default {
         answers: [],
       },
       message: '',
+      hasAccess: false,
       showMessage: false,
       editQuestionForm: {
         id: '',
@@ -332,22 +339,17 @@ export default {
     };
   },
   components: {
-    alert: Alert,
+    Alert,
+    NavigationBar,
+  },
+  computed: {
+    ...mapState(['user']),
   },
   methods: {
-    log(message) {
-      // eslint-disable-next-line no-alert
-      // alert(message);
-      // eslint-disable-next-line no-console
-      console.log(message);
-    },
     getQuestions() {
       const path = '/api/questions';
       axios.get(path)
         .then((res) => {
-          // eslint-disable-next-line no-console
-          console.log(res.data.questions);
-          this.log(JSON.stringify(res.data));
           this.questions = res.data.questions;
         })
         .catch((error) => {
@@ -359,8 +361,6 @@ export default {
       const path = '/api/questionCategories';
       axios.get(path)
         .then((res) => {
-          // eslint-disable-next-line no-console
-          this.log(JSON.stringify(res.data));
           this.questionCategories = res.data.question_categories;
         })
         .catch((error) => {
@@ -372,8 +372,6 @@ export default {
       const path = '/api/questionSubcategories';
       axios.get(path)
         .then((res) => {
-          // eslint-disable-next-line no-console
-          this.log(JSON.stringify(res.data));
           this.questionSubcategories = res.data.question_subcategories;
         })
         .catch((error) => {
@@ -385,8 +383,6 @@ export default {
       const path = '/api/questionClasses';
       axios.get(path)
         .then((res) => {
-          // eslint-disable-next-line no-console
-          this.log(JSON.stringify(res.data));
           this.questionClasses = res.data.question_classes;
         })
         .catch((error) => {
@@ -592,12 +588,42 @@ export default {
         }
       });
     },
+    checkAuthorization(userID) {
+      const path = '/api/managementAuthorization';
+      const payload = {
+        user_id: userID,
+      };
+      axios.post(path, payload)
+        .then((res) => {
+          this.hasAccess = res.data.result;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
   },
-  created() {
+  // watch: {
+  //   // whenever question changes, this function will run
+  //   user: function () {
+  //     // eslint-disable-next-line no-console
+  //     console.log(this.user);
+  //   },
+  // },
+  watch: {
+    user() {
+      this.checkAuthorization(this.user && this.user.email);
+    },
+  },
+  mounted() {
+    this.checkAuthorization(this.user && this.user.email);
     this.getQuestionCategories();
     this.getQuestionSubcategories();
     this.getQuestionClasses();
     this.getQuestions();
+  },
+  updated() {
+    this.checkAuthorization(this.user && this.user.email);
   },
 };
 </script>

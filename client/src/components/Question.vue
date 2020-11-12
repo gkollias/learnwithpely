@@ -1,63 +1,70 @@
 <template>
   <div>
-    <div class="flip-container">
-      <div class="" :id='elementId' v-if="question">
-        <div class="front">
-          <b-card
+    <FlipCard v-if="question" :flipped="isFlipped">
+      <template slot="front">
+        <b-card
             :title="question.question"
             :img-src="question.image_url"
             img-top
             tag="article"
             style="max-width: 20rem;"
-            class="mb-2"
+            class="mb-2 question-card__question"
           >
-            <b-card-text>
-              {{ question.question }}
-            </b-card-text>
-            <b-form-group label="Choose the correct answer:">
-              <b-form-radio-group
-                v-model="selectedAnswer"
-                v-if="question.answer"
-                :options="Object.keys(question.answer)"
-                name="radios-stacked"
-                stacked
-              ></b-form-radio-group>
-            </b-form-group>
-            <b-button @click="flip" variant="primary">Go</b-button>
-          </b-card>
-        </div>
-        <div class="back">
-          <b-card
-            :title="question.question"
-            :img-src="question.image_url"
-            img-top
-            tag="article"
-            :class="answerImageStyle"
-            class="mb-2"
-          >
-            <b-card-text>
-              {{ question.answer }}
-            </b-card-text>
-            <b-button variant="primary">Next</b-button>
-          </b-card>
-        </div>
-      </div>
+          <b-card-text>
+            {{ question.question }}
+          </b-card-text>
+          <b-form-group label="Choose the correct answer:">
+            <b-form-radio-group
+              v-model="selectedAnswer"
+              v-if="question.answer"
+              :options="Object.keys(question.answer)"
+              name="radios-stacked"
+              stacked
+            ></b-form-radio-group>
+          </b-form-group>
+          <b-button @click="flip" variant="primary">Go</b-button>
+        </b-card>
+      </template>
+      <template slot="back">
+        <b-card
+          :title="question.question"
+          :img-src="question.image_url"
+          img-top
+          tag="article"
+          :class="answerImageStyle"
+          class="mb-2 question-card__answer"
+        >
+          <b-card-text>
+            {{ question.answer }}
+          </b-card-text>
+          <b-button @click="nextQuestion" variant="primary">Next</b-button>
+        </b-card>
+      </template>
+    </FlipCard>
+    <div class="flip-container">
     </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import { mapActions, mapState } from 'vuex';
+import FlipCard from './FlipCard.vue';
+import store from '../store';
 
 export default {
+  components: {
+    FlipCard,
+  },
   props: {
-    id: String,
+    id: Number,
   },
   data() {
     return {
       question: {},
       selectedAnswer: '',
       elementId: '',
+      isFlipped: false,
       imageProps: {
         width: 75,
         height: 75,
@@ -67,8 +74,10 @@ export default {
     };
   },
   computed: {
+    ...mapActions(['setNextQuestion']),
+    ...mapState(['questions']),
     answerImageStyle() {
-      return this.checkAnswerCorrectness ? 'imgCorrectAnswerClass' : 'imgWrongAnswerClass';
+      return this.checkAnswerCorrectness ? 'question-card__answer-correct' : 'question-card__answer-wrong';
     },
     checkAnswerCorrectness() {
       if (!this.selectedAnswer) {
@@ -92,8 +101,13 @@ export default {
         });
     },
     flip() {
-      document.querySelector(`#${this.elementId}`).classList.toggle('flipper');
-      document.querySelector(`#${this.elementId}`).classList.toggle('back');
+      this.isFlipped = true;
+    },
+    nextQuestion() {
+      // eslint-disable-next-line no-console
+      console.log('nextQuestion');
+      store.dispatch('setNextQuestion');
+      this.isFlipped = false;
     },
   },
   created() {
@@ -103,59 +117,17 @@ export default {
 };
 </script>
 
-<style scoped>
-.imgClass {
-  background-color:dimgrey;
+<style>
+.question-card__question{
+  background-color: beige;
 }
 
-/* entire container, keeps perspective */
-.flip-container {
-  perspective: 1000px;
-}
-  /* flip the pane when hovered */
-.flip-container:hover .flipper, .flip-container.hover .flipper, .flip-container.flip .flipper {
-  transform: rotateY(180deg);
+.question-card__answer-correct{
+  background-color: green;
 }
 
-.flip-container, .front, .back {
-  width: 200px;
-  height: 540px;
+.question-card__answer-wrong{
+  background-color: red;
 }
 
-/* flip speed goes here */
-.flipper {
-  transition: 0.6s;
-  transform-style: preserve-3d;
-
-  position: relative;
-}
-
-/* hide back of pane during swap */
-.front, .back {
-  backface-visibility: hidden;
-
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-/* front pane, placed above back */
-.front {
-  z-index: 2;
-  /* for firefox 31 */
-  transform: rotateY(0deg);
-}
-
-/* back, initially hidden pane */
-.back {
-  transform: rotateY(180deg);
-}
-
-.imgCorrectAnswerClass {
-  background:green;
-}
-
-.imgWrongAnswerClass {
-  background:red;
-}
 </style>

@@ -22,7 +22,7 @@ export default new Router({
       component: QuestionManagement,
     },
     {
-      path: '/classQuestion',
+      path: '/classQuestion/:cq',
       name: 'classQuestion',
       component: ClassQuestion,
     },

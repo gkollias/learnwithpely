@@ -1,6 +1,9 @@
 import Vue from 'vue';
 import createAuth0Client from '@auth0/auth0-spa-js';
 
+import { mapActions } from 'vuex';
+import store from '../store';
+
 /** Define a default action to perform after authentication */
 // eslint-disable-next-line max-len
 const DEFAULT_REDIRECT_CALLBACK = () => window.history.replaceState({}, document.title, window.location.pathname);
@@ -31,6 +34,9 @@ export const useAuth0 = ({
         error: null,
       };
     },
+    computed: {
+      ...mapActions(['setUser']),
+    },
     methods: {
       /** Authenticates the user using a popup window */
       async loginWithPopup(o) {
@@ -47,6 +53,7 @@ export const useAuth0 = ({
 
         this.user = await this.auth0Client.getUser();
         this.isAuthenticated = true;
+        store.dispatch('setUser', await this.auth0Client.getUser());
       },
       /** Handles the callback when logging in using a redirect */
       async handleRedirectCallback() {
@@ -55,6 +62,7 @@ export const useAuth0 = ({
           await this.auth0Client.handleRedirectCallback();
           this.user = await this.auth0Client.getUser();
           this.isAuthenticated = true;
+          store.dispatch('setUser', await this.auth0Client.getUser());
         } catch (e) {
           this.error = e;
         } finally {
@@ -73,6 +81,10 @@ export const useAuth0 = ({
       getTokenSilently(o) {
         return this.auth0Client.getTokenSilently(o);
       },
+      async getAuthData() {
+        const user = await this.auth0Client.getUser();
+        return user;
+      },
       /** Gets the access token using a popup window */
 
       getTokenWithPopup(o) {
@@ -80,6 +92,8 @@ export const useAuth0 = ({
       },
       /** Logs the user out and removes their session on the authorization server */
       logout(o) {
+        store.dispatch('setUser', {});
+
         return this.auth0Client.logout(o);
       },
     },
@@ -109,6 +123,7 @@ export const useAuth0 = ({
         // Initialize our internal authentication state
         this.isAuthenticated = await this.auth0Client.isAuthenticated();
         this.user = await this.auth0Client.getUser();
+        store.dispatch('setUser', await this.auth0Client.getUser());
         this.loading = false;
       }
     },

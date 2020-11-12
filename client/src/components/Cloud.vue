@@ -1,7 +1,7 @@
 <template>
   <!-- eslint-disable max-len -->
   <div>
-    <router-link to="/classQuestion">
+    <router-link :to="classQuestionUrl">
       <svg
         version="1.1"
         id="Capa_1"
@@ -48,6 +48,11 @@ export default {
         width: 250,
       },
     };
+  },
+  computed: {
+    classQuestionUrl() {
+      return `/classQuestion/${this.classQuestion}`;
+    },
   },
 };
 </script>
