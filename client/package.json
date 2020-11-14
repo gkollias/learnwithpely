@@ -16,6 +16,7 @@
     "bootstrap-vue": "^2.18.0",
     "core-js": "^2.6.5",
     "es6-promise": "^4.2.8",
+    "lodash": "^4.17.20",
     "sweetalert2": "^9.10.12",
     "vue": "^2.6.12",
     "vue-authenticate": "^1.4.1",

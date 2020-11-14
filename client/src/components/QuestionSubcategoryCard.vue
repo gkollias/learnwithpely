@@ -1,5 +1,5 @@
 <template>
-  <div class="question_category__main">
+  <div class="question_subcategory__main">
     <b-card
       :title="title"
       tag="article"
@@ -8,12 +8,12 @@
       <b-card-text>
         {{ this.subtitle }}
         <b-form-select
-          id="form-question-category-input"
-          v-model="selectedCategoryId"
+          id="form-question-subcategory-input"
+          v-model="selectedSubcategoryId"
           required
-          placeholder="Enter question category"
+          placeholder="Enter question subcategory"
         >
-        <option v-for="qc in questionCategories"
+        <option v-for="qc in questionSubcategories"
           :value="qc.id" :key="qc.id">{{ qc.name }}
           </option>
         </b-form-select>
@@ -38,8 +38,8 @@ export default {
   data() {
     return {
       questionType: '',
-      questionCategories: {},
-      selectedCategoryId: 0,
+      questionSubcategories: {},
+      selectedSubcategoryId: 0,
       showNoResults: false,
       imageProps: {
         width: 75,
@@ -53,10 +53,10 @@ export default {
     ...mapActions(['setQuestions', 'setNextQuestion']),
     ...mapState(['questions']),
     title() {
-      return 'Questions by Category';
+      return 'Questions by Subcategory';
     },
     subtitle() {
-      return 'Please select the question category you want:';
+      return 'Please select the question subcategory you want:';
     },
   },
   methods: {
@@ -64,7 +64,7 @@ export default {
       return this.questions[0] ? this.questions[0].question : 'empty';
     },
     getQuestions() {
-      const path = `/api/questions/category/${this.selectedCategoryId}`;
+      const path = `/api/questions/subcategory/${this.selectedSubcategoryId}`;
       axios.get(path)
         .then((res) => {
           // eslint-disable-next-line no-console
@@ -85,11 +85,11 @@ export default {
           console.error(error);
         });
     },
-    getQuestionCategories() {
-      const path = '/api/questionCategories';
+    getQuestionSubcategories() {
+      const path = '/api/questionSubcategories';
       axios.get(path)
         .then((res) => {
-          this.questionCategories = res.data.question_categories;
+          this.questionSubcategories = res.data.question_subcategories;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -97,11 +97,11 @@ export default {
         });
     },
     noResultsText() {
-      return 'No results for this category, please choose a different one';
+      return 'No results for this subcategory, please choose a different one';
     },
   },
   created() {
-    this.getQuestionCategories();
+    this.getQuestionSubcategories();
   },
 };
 </script>

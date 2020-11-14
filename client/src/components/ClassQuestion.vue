@@ -1,24 +1,26 @@
 <template>
   <div>
     <NavigationBar />
-    testw {{this.cq}}
-    <div v-if="showQuestions" class="d-flex justify-content-between">
+    <div v-if="showQuestions" class="d-flex justify-content-center">
       <Question :id="currentQuestionId" />
     </div>
     <div v-else class="d-flex justify-content-between">
-      <QuestionCategoryCard category="category"/>
+      <QuestionClassCard />
+      <QuestionCategoryCard />
+      <QuestionSubcategoryCard />
     </div>
-    <!-- test{{this.props.q}} -->
-    <!-- <b-img v-bind="imageProps" :src="getIconUrl" fluid alt="Responsive image"></b-img> -->
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
+import store from '../store';
+
 import NavigationBar from './NavigationBar.vue';
 import Question from './Question.vue';
 import QuestionCategoryCard from './QuestionCategoryCard.vue';
-
+import QuestionClassCard from './QuestionClassCard.vue';
+import QuestionSubcategoryCard from './QuestionSubcategoryCard.vue';
 
 export default {
   name: 'ClassQuestion',
@@ -28,24 +30,29 @@ export default {
   components: {
     NavigationBar,
     Question,
+    QuestionClassCard,
     QuestionCategoryCard,
+    QuestionSubcategoryCard,
   },
   data() {
     return {
-      cq: this.$route.params.cq,
+      classQuestion: this.$route.params.classQuestion,
     };
   },
   computed: {
     ...mapState(['showQuestions', 'currentQuestionId']),
-    getIconUrl() {
-      // eslint-disable-next-line global-require
-      const url = require('../assets/images/cloud.svg');
-      return url;
-    },
+    ...mapActions(['initNextQuestion']),
+    // getIconUrl() {
+    //   // eslint-disable-next-line global-require
+    //   const url = require('../assets/images/cloud.svg');
+    //   return url;
+    // },
   },
   methods: {
   },
   created() {
+    store.dispatch('initNextQuestion');
+    store.dispatch('showQuestions', false);
   },
 };
 </script>

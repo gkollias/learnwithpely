@@ -35,7 +35,7 @@
           class="mb-2 question-card__answer"
         >
           <b-card-text>
-            {{ question.answer }}
+            {{this.answerOutcomeText}} {{ this.getCorrectAnswer }}
           </b-card-text>
           <b-button @click="nextQuestion" variant="primary">Next</b-button>
         </b-card>
@@ -49,6 +49,7 @@
 <script>
 import axios from 'axios';
 import { mapActions, mapState } from 'vuex';
+import _ from 'lodash';
 import FlipCard from './FlipCard.vue';
 import store from '../store';
 
@@ -63,7 +64,6 @@ export default {
     return {
       question: {},
       selectedAnswer: '',
-      elementId: '',
       isFlipped: false,
       imageProps: {
         width: 75,
@@ -80,11 +80,29 @@ export default {
       return this.checkAnswerCorrectness ? 'question-card__answer-correct' : 'question-card__answer-wrong';
     },
     checkAnswerCorrectness() {
+      if (_.isEmpty(this.question)) {
+        return '';
+      }
       if (!this.selectedAnswer) {
         return false;
       }
       const answer = this.question.answer[this.selectedAnswer];
       return answer;
+    },
+    answerOutcomeText() {
+      if (this.checkAnswerCorrectness) {
+        return 'Great job! The correct answer is: ';
+      }
+      return 'Better luck next time. The correct answer is: ';
+    },
+    getCorrectAnswer() {
+      if (_.isEmpty(this.question)) {
+        return '';
+      }
+      const { answer } = this.question;
+      const identifiers = Object.keys(answer);
+      const correctAnswer = identifiers.filter(id => answer[id]);
+      return correctAnswer[0];
     },
   },
   methods: {
@@ -92,7 +110,6 @@ export default {
       const path = `/api/questions/${id}`;
       axios.get(path)
         .then((res) => {
-          // alert(res.data.questions);
           this.question = res.data.questions;
         })
         .catch((error) => {
@@ -104,14 +121,16 @@ export default {
       this.isFlipped = true;
     },
     nextQuestion() {
-      // eslint-disable-next-line no-console
-      console.log('nextQuestion');
       store.dispatch('setNextQuestion');
       this.isFlipped = false;
     },
   },
+  watch: {
+    id() {
+      this.getQuestion(this.id);
+    },
+  },
   created() {
-    this.elementId = `question_${this.id}`;
     this.getQuestion(this.id);
   },
 };

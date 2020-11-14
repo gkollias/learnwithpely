@@ -9,14 +9,21 @@ import {
 function getNextQuestionId(state) {
   const id = parseInt(state.currentQuestionId, 10);
   // eslint-disable-next-line no-console
-  console.log(id);
-  if (id === 0) {
+  // console.log(id);
+  if (id === 0 && state.questions.length > 0) {
     return state.questions[0].id;
   }
   for (let i = 0; i < state.questions.length - 1; i += 1) {
     if (state.questions[i].id === id) {
       return state.questions[i + 1].id;
     }
+  }
+  return 0;
+}
+
+function initNextQuestionId(state) {
+  if (state.questions.length > 0) {
+    return state.questions[0].id;
   }
   return 0;
 }
@@ -37,6 +44,10 @@ export default {
 
   setNextQuestion({ state, commit }) {
     commit(SET_NEXT_QUESTION, getNextQuestionId(state));
+  },
+
+  initNextQuestion({ state, commit }) {
+    commit(SET_NEXT_QUESTION, initNextQuestionId(state));
   },
 
   showQuestions({ commit }, show) {

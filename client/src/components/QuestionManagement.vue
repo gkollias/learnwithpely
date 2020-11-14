@@ -127,7 +127,7 @@
                       label-for="form-chapter-input">
             <b-form-input id="form-chapter-input"
                           type="text"
-                          v-model="addQuestionForm.chapter"
+                          v-model="addQuestionForm.question_chapter"
                           required
                           placeholder="Enter chapter">
             </b-form-input>
@@ -172,12 +172,15 @@
             </b-form-input>
             <b-form-checkbox v-model="addQuestionForm.answer_3_correct">Correct?</b-form-checkbox>
             <br/>
+          </b-form-group>
+          <b-form-group id="form-image-class-group"
+                        label="Image URL:"
+                        label-for="form-image-class-input">
             <b-form-input id="form-image-input"
                           type="text"
                           v-model="addQuestionForm.image_url"
                           placeholder="Image URL">
             </b-form-input>
-            <br/>
           </b-form-group>
           <b-button-group>
             <b-button type="submit" variant="primary">Submit</b-button>
@@ -233,7 +236,7 @@
                       label-for="form-chapter-input">
             <b-form-input id="form-chapter-input"
                           type="text"
-                          v-model="editQuestionForm.chapter"
+                          v-model="editQuestionForm.question_chapter"
                           required
                           placeholder="Enter chapter">
             </b-form-input>
@@ -278,12 +281,15 @@
             </b-form-input>
             <b-form-checkbox v-model="editQuestionForm.answer_3_correct">Correct?</b-form-checkbox>
             <br/>
+          </b-form-group>
+          <b-form-group id="form-image-class-group"
+                        label="Image URL:"
+                        label-for="form-image-class-input">
             <b-form-input id="form-image-input"
                           type="text"
                           v-model="editQuestionForm.image_url"
                           placeholder="Image URL">
             </b-form-input>
-            <br/>
           </b-form-group>
           <b-button-group>
             <b-button type="submit" variant="primary">Update</b-button>
@@ -465,7 +471,6 @@ export default {
         [this.addQuestionForm.answer_3]: this.addQuestionForm.answer_3_correct
           ? this.addQuestionForm.answer_3_correct : false,
       };
-      this.log(answer);
 
       const payload = {
         question: this.addQuestionForm.question,
@@ -515,7 +520,6 @@ export default {
         [this.editQuestionForm.answer_3]: this.editQuestionForm.answer_3_correct
           ? this.editQuestionForm.answer_3_correct : false,
       };
-      this.log(answer);
 
       const payload = {
         question: this.editQuestionForm.question,
@@ -603,13 +607,6 @@ export default {
         });
     },
   },
-  // watch: {
-  //   // whenever question changes, this function will run
-  //   user: function () {
-  //     // eslint-disable-next-line no-console
-  //     console.log(this.user);
-  //   },
-  // },
   watch: {
     user() {
       this.checkAuthorization(this.user && this.user.email);
