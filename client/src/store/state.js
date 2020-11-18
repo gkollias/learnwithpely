@@ -4,4 +4,5 @@ export default {
   questions: {},
   showQuestions: false,
   currentQuestionId: '0',
+  userScore: 0,
 };

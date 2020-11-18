@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FlipCard v-if="question" :flipped="isFlipped">
+    <FlipCard v-if="question" :flipped="questionAnswered">
       <template slot="front">
         <b-card
             :title="question.question"
@@ -64,7 +64,7 @@ export default {
     return {
       question: {},
       selectedAnswer: '',
-      isFlipped: false,
+      questionAnswered: false,
       imageProps: {
         width: 75,
         height: 75,
@@ -74,9 +74,12 @@ export default {
     };
   },
   computed: {
-    ...mapActions(['setNextQuestion']),
-    ...mapState(['questions']),
+    ...mapActions(['setNextQuestion', 'incrementScore']),
+    ...mapState(['questions', 'user']),
     answerImageStyle() {
+      if (!this.questionAnswered) {
+        return 'question-card__question';
+      }
       return this.checkAnswerCorrectness ? 'question-card__answer-correct' : 'question-card__answer-wrong';
     },
     checkAnswerCorrectness() {
@@ -86,8 +89,9 @@ export default {
       if (!this.selectedAnswer) {
         return false;
       }
-      const answer = this.question.answer[this.selectedAnswer];
-      return answer;
+      const isAnswerCorrect = this.question.answer[this.selectedAnswer];
+
+      return isAnswerCorrect;
     },
     answerOutcomeText() {
       if (this.checkAnswerCorrectness) {
@@ -118,11 +122,34 @@ export default {
         });
     },
     flip() {
-      this.isFlipped = true;
+      this.questionAnswered = true;
+      if (this.checkAnswerCorrectness) {
+        store.dispatch('incrementScore', 10);
+        this.storeAnsweredQuestion(true);
+      } else {
+        this.storeAnsweredQuestion(false);
+      }
     },
     nextQuestion() {
       store.dispatch('setNextQuestion');
-      this.isFlipped = false;
+      this.questionAnswered = false;
+    },
+    storeAnsweredQuestion(isCorrect) {
+      // eslint-disable-next-line no-console
+      console.log(this.user);
+      const payload = {
+        user_id: this.user.id,
+        question_id: this.id,
+        is_correct: isCorrect,
+      };
+      const path = '/api/user/questions/answered/add';
+      axios.post(path, payload)
+        .then(() => {
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
     },
   },
   watch: {

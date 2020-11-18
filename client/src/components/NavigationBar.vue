@@ -7,6 +7,7 @@
         </router-link>
       </b-navbar-brand>
       <b-navbar-nav v-if="!$auth.loading" class='ml-auto'>
+        <b-nav-text v-if="$auth.isAuthenticated" align="left">Score: {{this.userScore}}</b-nav-text>
         <b-nav-item-dropdown v-if="$auth.isAuthenticated" :text='getUserName()' right>
           <b-dropdown-item href='#'>Account</b-dropdown-item>
           <b-dropdown-item href='#'>Settings</b-dropdown-item>
@@ -23,7 +24,7 @@
 <script>
 import Vue from 'vue';
 import 'es6-promise/auto';
-import Vuex, { mapActions } from 'vuex';
+import Vuex, { mapActions, mapState } from 'vuex';
 
 Vue.use(Vuex);
 
@@ -35,6 +36,7 @@ export default {
   components: {
   },
   computed: {
+    ...mapState(['userScore']),
     ...mapActions(['setAuthorization']),
   },
   methods: {

@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
+from datetime import datetime
 
 
 # configuration
@@ -21,45 +22,6 @@ ma = Marshmallow(app)
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
-
-class QuestionCategory(db.Model):
-    __tablename__ = 'question_category'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), unique=True)
-    children = db.relationship("Question")
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return '<Name %r>' % self.name
-
-class QuestionSubcategory(db.Model):
-    __tablename__ = 'question_subcategory'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), unique=True)
-    question_category_id = db.Column(db.Integer, db.ForeignKey('question_category.id'))
-
-    children = db.relationship("QuestionCategory")
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return '<Name %r>' % self.name
-
-
-class QuestionClass(db.Model):
-    __tablename__ = 'question_class'
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(100), unique=True)
-    children = db.relationship("Question")
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return '<Name %r>' % self.name
 
 class Question(db.Model):
     __tablename__ = 'question'
@@ -97,22 +59,133 @@ class QuestionSchema(ma.ModelSchema):
         model = Question
         include_fk = True
 
+
+class QuestionCategory(db.Model):
+    __tablename__ = 'question_category'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True)
+    children = db.relationship("Question")
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
 class QuestionCategorySchema(ma.ModelSchema):
     class Meta:
         model = QuestionCategory
+
+class QuestionSubcategory(db.Model):
+    __tablename__ = 'question_subcategory'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True)
+    question_category_id = db.Column(db.Integer, db.ForeignKey('question_category.id'))
+
+    children = db.relationship("QuestionCategory")
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
 
 class QuestionSubcategorySchema(ma.ModelSchema):
     class Meta:
         model = QuestionSubcategory
 
+class QuestionClass(db.Model):
+    __tablename__ = 'question_class'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True)
+    children = db.relationship("Question")
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
 class QuestionClassSchema(ma.ModelSchema):
     class Meta:
         model = QuestionClass
 
-# sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('pong!')
+class User(db.Model):
+    __tablename__ = 'user'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True)
+    email = db.Column(db.String(100), unique=True)
+    created_by = db.Column(db.String(200))
+    created_date = db.Column(db.DateTime)
+    updated_by = db.Column(db.String(200))
+    updated_date = db.Column(db.DateTime)
+
+    def __init__(self, name, email, created_by, created_date, updated_by, updated_date):
+        self.name = name
+        self.email = email
+        self.created_by = created_by
+        self.created_date = created_date
+        self.updated_by = updated_by
+        self.updated_date = updated_date
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
+class UserSchema(ma.ModelSchema):
+    class Meta:
+        model = User
+
+class UserScore(db.Model):
+    __tablename__ = 'user_score'
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    score = db.Column(db.Integer)
+    updated_by = db.Column(db.String(200))
+    updated_date = db.Column(db.DateTime)
+
+    def __init__(self, user_id, score, updated_by, updated_date):
+        self.user_id = user_id
+        self.score = score
+
+        self.updated_by = updated_by
+        self.updated_date = updated_date
+
+    def __repr__(self):
+        return '<user_id %r>' % self.user_id
+
+class UserScoreSchema(ma.ModelSchema):
+    class Meta:
+        model = UserScore
+
+
+class UserQuestionAnswered(db.Model):
+    __tablename__ = 'user_question_answered'
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
+    question_id = db.Column(db.Integer, db.ForeignKey('question.id'), primary_key=True)
+    times_answered = db.Column(db.Integer)
+    times_correct = db.Column(db.Integer)
+
+    created_by = db.Column(db.String(200))
+    created_date = db.Column(db.DateTime)
+    updated_by = db.Column(db.String(200))
+    updated_date = db.Column(db.DateTime)
+
+    def __init__(self, user_id, question_id, times_answered, times_correct, created_by, created_date, updated_by, updated_date):
+        self.user_id = user_id
+        self.question_id = question_id
+        self.times_answered = times_answered
+        self.times_correct = times_correct
+
+        self.created_by = created_by
+        self.created_date = created_date
+        self.updated_by = updated_by
+        self.updated_date = updated_date
+
+    def __repr__(self):
+        return '<user_id %r>' % self.user_id
+
+class UserQuestionAnsweredSchema(ma.ModelSchema):
+    class Meta:
+        model = UserQuestionAnswered
 
 
 @app.route('/api/questions', methods=['GET', 'POST'])
@@ -198,7 +271,6 @@ def questions_by_class(class_id):
         response_object['questions'] = question_schema.dump(questions, many=True)
     return jsonify(response_object)
 
-
 @app.route('/api/questionCategories', methods=['GET'])
 def all_question_categories():
     response_object = {'status': 'success'}
@@ -231,13 +303,100 @@ def login():
 def questionsManagement():
     post_data = request.get_json()
     user_id = post_data.get('user_id')
-    print(user_id)
 
     authorized_users = ['gkollias13@gmail.com', 'pelagiakorre@gmail.com']
     auth = False
     if user_id in authorized_users:
         auth = True
     response_object = {'result':  auth}
+    return jsonify(response_object)
+
+@app.route('/api/user/info', methods=['POST'])
+def user():
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    email = post_data.get('email')
+    name = post_data.get('name')
+    now = datetime.now()
+
+    user_schema = UserSchema()
+    user_info = user_schema.dump(User.query.filter_by(email=email).first())
+
+    if user_info == {}:
+        user_info = User(name, email, 'dbo', now, 'dbo', now)
+        db.session.add(user_info)
+        db.session.commit()
+        response_object['message_user'] = 'User added!'
+        user_info = user_schema.dump(user_info)
+
+
+    user_score_schema = UserScoreSchema()
+    user_score = user_score_schema.dump(UserScore.query.filter_by(user_id=user_info['id']).first())
+    if user_score == {}:
+        user_score = UserScore(user_info['id'], 0, 'dbo', now)
+        db.session.add(user_score)
+        db.session.commit()
+        response_object['message_score'] = 'User score added!'
+        user_score = user_score_schema.dump(user_score)
+
+    response_object['user_info'] = user_info
+    response_object['user_score'] = user_score['score']
+
+    return jsonify(response_object)
+
+@app.route('/api/user/score/increment', methods=['PUT'])
+def score_increment():
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+
+    score_increment = post_data.get('score_increment')
+    user_id = post_data.get('user_id')
+    now = datetime.now()
+
+    user_score = UserScore.query.get(user_id)
+    if user_score != {}:
+        user_score.score += score_increment
+        user_score.updated_date = now
+        db.session.commit()
+        response_object['message_score'] = 'User score updated!'
+        response_object['score'] = user_score.score
+
+    return jsonify(response_object)
+
+@app.route('/api/user/questions/answered/<user_id>', methods=['GET'])
+def questions_answered(user_id):
+    response_object = {'status': 'success'}
+    user_question_answered_schema = UserQuestionAnsweredSchema()
+    response_object['questions_answered'] = user_question_answered_schema.dump(UserQuestionAnswered.query.filter_by(user_id=user_id).all(), many= True)
+
+    return jsonify(response_object)
+
+@app.route('/api/user/questions/answered/add', methods=['POST'])
+def questions_answered_add():
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    times_correct = 0
+    user_id = post_data.get('user_id')
+    question_id = post_data.get('question_id')
+    now = datetime.now()
+
+    question_answered = UserQuestionAnswered.query.filter_by(user_id=user_id, question_id=question_id).first()
+
+    if question_answered != {} and question_answered != None:
+        question_answered.times_correct += 1 if post_data.get('is_correct') == True else 0
+        question_answered.times_answered += 1
+        question_answered.updated_date = now
+        db.session.commit()
+        response_object['message'] = 'Question answered updated!'
+    else:    
+        times_correct = 1 if post_data.get('is_correct') == True else 0
+        times_answered = 1
+        question_answered = UserQuestionAnswered(user_id, question_id, times_answered, times_correct, 'dbo', now, 'dbo', now)
+        db.session.add(question_answered)
+        db.session.commit()
+        response_object['message'] = 'Question answered added!'
+
     return jsonify(response_object)
 
 

@@ -1,13 +1,15 @@
 <template>
   <div>
     <NavigationBar />
-    <div v-if="showQuestions" class="d-flex justify-content-center">
-      <Question :id="currentQuestionId" />
-    </div>
-    <div v-else class="d-flex justify-content-between">
-      <QuestionClassCard />
-      <QuestionCategoryCard />
-      <QuestionSubcategoryCard />
+    <div class="class_question__main-container">
+      <div v-if="showQuestions" class="d-flex justify-content-center">
+        <Question :id="currentQuestionId" />
+      </div>
+      <div v-else class="d-flex justify-content-between">
+        <QuestionClassCard />
+        <QuestionCategoryCard />
+        <QuestionSubcategoryCard />
+      </div>
     </div>
   </div>
 </template>
@@ -58,4 +60,8 @@ export default {
 </script>
 
 <style scoped>
+.class_question__main-container{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 </style>

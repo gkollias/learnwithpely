@@ -3,6 +3,8 @@ import {
   SET_QUESTIONS,
   SET_NEXT_QUESTION,
   SHOW_QUESTIONS,
+  SET_SCORE,
+  INCREMENT_SCORE,
 } from './mutation-types';
 
 export default {
@@ -21,5 +23,15 @@ export default {
   [SHOW_QUESTIONS](state, show) {
     // eslint-disable-next-line no-param-reassign
     state.showQuestions = show;
+  },
+
+  [SET_SCORE](state, score) {
+    // eslint-disable-next-line no-param-reassign
+    state.userScore = score;
+  },
+
+  [INCREMENT_SCORE](state, score) {
+    // eslint-disable-next-line no-param-reassign
+    state.userScore += score;
   },
 };
