@@ -10,10 +10,10 @@
             style="max-width: 20rem;"
             class="mb-2 question-card__question"
           >
-          <b-card-text>
+          <!-- <b-card-text>
             {{ question.question }}
-          </b-card-text>
-          <b-form-group label="Choose the correct answer:">
+          </b-card-text> -->
+          <b-form-group :label="getQuestionLabel">
             <b-form-radio-group
               v-model="selectedAnswer"
               v-if="question.answer"
@@ -22,7 +22,7 @@
               stacked
             ></b-form-radio-group>
           </b-form-group>
-          <b-button @click="flip" variant="primary">Go</b-button>
+          <b-button @click="answerClick" variant="primary">{{this.answerButtonText}}</b-button>
         </b-card>
       </template>
       <template slot="back">
@@ -37,7 +37,7 @@
           <b-card-text>
             {{this.answerOutcomeText}} {{ this.getCorrectAnswer }}
           </b-card-text>
-          <b-button @click="nextQuestion" variant="primary">Next</b-button>
+          <b-button @click="nextQuestion" variant="primary">{{this.nextButtonText}}</b-button>
         </b-card>
       </template>
     </FlipCard>
@@ -93,12 +93,6 @@ export default {
 
       return isAnswerCorrect;
     },
-    answerOutcomeText() {
-      if (this.checkAnswerCorrectness) {
-        return 'Great job! The correct answer is: ';
-      }
-      return 'Better luck next time. The correct answer is: ';
-    },
     getCorrectAnswer() {
       if (_.isEmpty(this.question)) {
         return '';
@@ -107,6 +101,21 @@ export default {
       const identifiers = Object.keys(answer);
       const correctAnswer = identifiers.filter(id => answer[id]);
       return correctAnswer[0];
+    },
+    answerOutcomeText() {
+      if (this.checkAnswerCorrectness) {
+        return 'Μπράβο! Η σωστή απάντηση είναι: ';
+      }
+      return 'Κρίμα, αυτό δεν είναι σωστό. Η σωστή απάντηση είναι: ';
+    },
+    getQuestionLabel() {
+      return 'Παρακαλώ επέλεξε τη σωστή απάντηση:';
+    },
+    answerButtonText() {
+      return 'OK';
+    },
+    nextButtonText() {
+      return 'Επόμενη ερώτηση';
     },
   },
   methods: {
@@ -121,7 +130,7 @@ export default {
           console.error(error);
         });
     },
-    flip() {
+    answerClick() {
       this.questionAnswered = true;
       if (this.checkAnswerCorrectness) {
         store.dispatch('incrementScore', 10);

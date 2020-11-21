@@ -18,7 +18,7 @@
           </option>
         </b-form-select>
       </b-card-text>
-      <b-button @click="getQuestions" variant="primary">Go</b-button>
+      <b-button @click="getQuestions" variant="primary">{{this.ctaBtnText}}</b-button>
     </b-card>
     <div v-if="showNoResults">
       {{ this.noResultsText() }}
@@ -53,10 +53,13 @@ export default {
     ...mapActions(['setQuestions', 'setNextQuestion']),
     ...mapState(['questions']),
     title() {
-      return 'Questions by Subcategory';
+      return 'Ερωτήσεις ανά υποκατηγορία';
     },
     subtitle() {
-      return 'Please select the question subcategory you want:';
+      return 'Παρακαλώ επίλεξε την υποκατηγορία ερώτησης που θα ήθελες:';
+    },
+    ctaBtnText() {
+      return 'Πάμε!';
     },
   },
   methods: {
@@ -97,7 +100,7 @@ export default {
         });
     },
     noResultsText() {
-      return 'No results for this subcategory, please choose a different one';
+      return 'Δεν υπάρχουν αποτελέσματα για αυτή την υποκατηγορία, παρακαλώ επιλέξτε μία άλλη.';
     },
   },
   created() {

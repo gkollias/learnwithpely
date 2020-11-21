@@ -3,11 +3,13 @@
     style='background-color:rgb(186, 88, 67)!important'>
       <b-navbar-brand tag='h1' class='mb-0'>
         <router-link style="color:black" to="/">
-            Learn with Pely
+            {{this.titleText}}
         </router-link>
       </b-navbar-brand>
       <b-navbar-nav v-if="!$auth.loading" class='ml-auto'>
-        <b-nav-text v-if="$auth.isAuthenticated" align="left">Score: {{this.userScore}}</b-nav-text>
+        <b-nav-text v-if="$auth.isAuthenticated" align="left">
+          {{this.scoreText}} {{this.userScore}}
+        </b-nav-text>
         <b-nav-item-dropdown v-if="$auth.isAuthenticated" :text='getUserName()' right>
           <b-dropdown-item href='#'>Account</b-dropdown-item>
           <b-dropdown-item href='#'>Settings</b-dropdown-item>
@@ -15,7 +17,7 @@
         </b-nav-item-dropdown>
         <b-avatar v-if="$auth.isAuthenticated" variant="info" :src="getProfilePicture()"></b-avatar>
         <b-button v-if="!$auth.isAuthenticated" variant="primary" @click="login">
-          Sign in
+          {{this.signInText}}
         </b-button>
       </b-navbar-nav>
     </b-navbar>
@@ -38,6 +40,15 @@ export default {
   computed: {
     ...mapState(['userScore']),
     ...mapActions(['setAuthorization']),
+    titleText() {
+      return 'Learn with Pely';
+    },
+    signInText() {
+      return 'Sign in';
+    },
+    scoreText() {
+      return 'Score:';
+    },
   },
   methods: {
     // Log the user in
