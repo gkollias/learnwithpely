@@ -6,8 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "eslint . --ext .js",
-    "format": "prettier-eslint --eslint-config-path ./.eslintrc.json --write $PWD/'**/*.js'",
-    "postinstall": "npm rebuild node-sass && npm install --unsafe-perm -f node-sass"
+    "format": "prettier-eslint --eslint-config-path ./.eslintrc.json --write $PWD/'**/*.js'"
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.8.2",
