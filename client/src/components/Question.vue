@@ -1,28 +1,37 @@
 <template>
   <div>
-    <FlipCard v-if="question" :flipped="questionAnswered">
+    <FlipCard
+      v-if="question"
+      :flipped="questionAnswered"
+    >
       <template slot="front">
         <b-card
-            :title="question.question"
-            :img-src="question.image_url"
-            img-top
-            tag="article"
-            style="max-width: 20rem;"
-            class="mb-2 question-card__question"
-          >
+          :title="question.question"
+          :img-src="question.image_url"
+          img-top
+          tag="article"
+          style="max-width: 20rem;"
+          class="mb-2 question-card__question"
+        >
           <!-- <b-card-text>
             {{ question.question }}
           </b-card-text> -->
           <b-form-group :label="getQuestionLabel">
             <b-form-radio-group
-              v-model="selectedAnswer"
               v-if="question.answer"
+              v-model="selectedAnswer"
               :options="Object.keys(question.answer)"
               name="radios-stacked"
               stacked
-            ></b-form-radio-group>
+            />
           </b-form-group>
-          <b-button @click="answerClick" variant="primary">{{this.answerButtonText}}</b-button>
+          <b-button
+            :disabled="!selectedAnswer"
+            variant="primary"
+            @click="answerClick"
+          >
+            {{ answerButtonText }}
+          </b-button>
         </b-card>
       </template>
       <template slot="back">
@@ -35,14 +44,27 @@
           class="mb-2 question-card__answer"
         >
           <b-card-text>
-            {{this.answerOutcomeText}} {{ this.getCorrectAnswer }}
+            {{ answerOutcomeText }} {{ getCorrectAnswer }}
+
+            <!-- <lottie-player
+              autoplay
+              loop
+              mode="normal"
+              src="https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json"
+              style="width: 320px"
+            >
+            </lottie-player> -->
           </b-card-text>
-          <b-button @click="nextQuestion" variant="primary">{{this.nextButtonText}}</b-button>
+          <b-button
+            variant="primary"
+            @click="nextQuestion"
+          >
+            {{ nextButtonText }}
+          </b-button>
         </b-card>
       </template>
     </FlipCard>
-    <div class="flip-container">
-    </div>
+    <div class="flip-container" />
   </div>
 </template>
 
@@ -50,6 +72,7 @@
 import axios from 'axios';
 import { mapActions, mapState } from 'vuex';
 import _ from 'lodash';
+import '@lottiefiles/lottie-player';
 import FlipCard from './FlipCard.vue';
 import store from '../store';
 
@@ -58,7 +81,10 @@ export default {
     FlipCard,
   },
   props: {
-    id: Number,
+    id: {
+      type: Number,
+      default: 0,
+    },
   },
   data() {
     return {
@@ -99,7 +125,7 @@ export default {
       }
       const { answer } = this.question;
       const identifiers = Object.keys(answer);
-      const correctAnswer = identifiers.filter(id => answer[id]);
+      const correctAnswer = identifiers.filter((id) => answer[id]);
       return correctAnswer[0];
     },
     answerOutcomeText() {
@@ -117,6 +143,14 @@ export default {
     nextButtonText() {
       return 'Επόμενη ερώτηση';
     },
+  },
+  watch: {
+    id() {
+      this.getQuestion(this.id);
+    },
+  },
+  created() {
+    this.getQuestion(this.id);
   },
   methods: {
     getQuestion(id) {
@@ -138,14 +172,16 @@ export default {
       } else {
         this.storeAnsweredQuestion(false);
       }
+      this.selectedAnswer = '';
     },
     nextQuestion() {
       store.dispatch('setNextQuestion');
       this.questionAnswered = false;
     },
     storeAnsweredQuestion(isCorrect) {
-      // eslint-disable-next-line no-console
-      console.log(this.user);
+      if (_.isEmpty(this.user)) {
+        return;
+      }
       const payload = {
         user_id: this.user.id,
         question_id: this.id,
@@ -161,28 +197,21 @@ export default {
         });
     },
   },
-  watch: {
-    id() {
-      this.getQuestion(this.id);
-    },
-  },
-  created() {
-    this.getQuestion(this.id);
-  },
 };
 </script>
 
 <style>
 .question-card__question{
-  background-color: beige;
+  background-color: beige!important;
+  padding: 10px 10px 10px 10px;
 }
 
 .question-card__answer-correct{
-  background-color: green;
+  background-color: rgb(87, 233, 87)!important;
 }
 
 .question-card__answer-wrong{
-  background-color: red;
+  background-color: rgb(255, 121, 121)!important;
 }
 
 </style>

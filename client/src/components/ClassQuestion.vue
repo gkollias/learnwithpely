@@ -1,16 +1,23 @@
 <template>
-  <div>
-    <NavigationBar />
-    <div class="class_question__main-container">
-      <div v-if="showQuestions" class="d-flex justify-content-center">
+  <div class="landing_wrap">
+    <Header />
+    <Intro />
+    <div class="class-question__main">
+      <div
+        v-if="showQuestions"
+        class="d-flex justify-content-center"
+      >
         <Question :id="currentQuestionId" />
       </div>
-      <div v-else class="d-flex justify-content-between">
-        <QuestionClassCard />
-        <QuestionCategoryCard />
-        <QuestionSubcategoryCard />
+      <div
+        v-else
+        class="d-flex justify-content-between"
+      >
+        <QuestionCategoryCard :class-id="classQuestion" />
+        <QuestionSubcategoryCard :class-id="classQuestion" />
       </div>
     </div>
+    <Footer />
   </div>
 </template>
 
@@ -18,21 +25,25 @@
 import { mapState, mapActions } from 'vuex';
 import store from '../store';
 
-import NavigationBar from './NavigationBar.vue';
+import Header from './common/Header.vue';
+import Footer from './common/Footer.vue';
+import Intro from './intros/introCut.vue';
 import Question from './Question.vue';
 import QuestionCategoryCard from './QuestionCategoryCard.vue';
-import QuestionClassCard from './QuestionClassCard.vue';
 import QuestionSubcategoryCard from './QuestionSubcategoryCard.vue';
 
 export default {
   name: 'ClassQuestion',
-  props: {
-    q: String,
+  metaInfo: {
+    bodyAttrs: {
+      class: ['landing-gradient-slight-ocean'],
+    },
   },
   components: {
-    NavigationBar,
+    Header,
+    Footer,
+    Intro,
     Question,
-    QuestionClassCard,
     QuestionCategoryCard,
     QuestionSubcategoryCard,
   },
@@ -50,18 +61,18 @@ export default {
     //   return url;
     // },
   },
-  methods: {
-  },
   created() {
     store.dispatch('initNextQuestion');
     store.dispatch('showQuestions', false);
   },
+  methods: {
+  },
 };
 </script>
 
-<style scoped>
-.class_question__main-container{
-  margin-top: 20px;
-  margin-bottom: 20px;
+<style>
+.class-question__main {
+  margin-top: 40px;
+  margin-bottom: 40px;
 }
 </style>

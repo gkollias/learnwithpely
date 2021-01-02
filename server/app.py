@@ -6,6 +6,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from datetime import datetime
+from itertools import chain
 
 
 # configuration
@@ -270,6 +271,37 @@ def questions_by_class(class_id):
         question_schema = QuestionSchema()
         response_object['questions'] = question_schema.dump(questions, many=True)
     return jsonify(response_object)
+
+@app.route('/api/questions/filter', methods=['POST'])
+def questions_filter():
+    response_object = {'status': 'success'}
+    post_data = request.get_json()
+    class_id = post_data.get('class_id')
+    category_id = post_data.get('category_id')
+    subcategory_id = post_data.get('subcategory_id')
+    if class_id != None:
+        questions = set(Question.query.filter_by(question_class_id=class_id).all())
+    if category_id != None:
+        q_category = set(Question.query.filter_by(question_category_id=category_id).all())
+        if questions != None:
+            questions = questions.intersection(q_category)
+        else:
+            questions = q_category
+    if subcategory_id != None:
+        q_subcategory = set(Question.query.filter_by(question_subcategory_id=subcategory_id).all())
+        if questions != None:
+            questions = questions.intersection(q_subcategory)
+        else:
+            questions = q_subcategory
+
+    if questions == None:
+        response_object['message'] = 'class,category,subcategory does not exist!'
+        return jsonify(response_object)
+
+    question_schema = QuestionSchema()
+    response_object['questions'] = question_schema.dump(questions, many=True)
+    return jsonify(response_object)
+
 
 @app.route('/api/questionCategories', methods=['GET'])
 def all_question_categories():

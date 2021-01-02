@@ -1,48 +1,44 @@
 <template>
-  <div>
-    <NavigationBar />
-    <div>
-        <b-img :src="getIconUrl()" fluid alt="Fluid-grow image"></b-img>
-    </div>
-
-    <div class='d-flex flex-wrap justify-content-between align-content-center ml-auto'>
-      <Cloud classQuestion="Α"/>
-      <Cloud classQuestion="Β"/>
-      <Cloud classQuestion="Γ"/>
-    </div>
+  <div class="landing_wrap">
+    <dx-header />
+    <dxIntro />
+    <QuestionsClass />
+    <!-- <dx-service /> -->
+    <!-- <dx-priceTable /> -->
+    <dx-team />
+    <dx-faq />
+    <dx-contact />
+    <dxFooter />
   </div>
 </template>
-
 <script>
 
-import Cloud from './Cloud.vue';
-import NavigationBar from './NavigationBar.vue';
+import intro from './intros/introFive.vue';
+import QuestionsClass from './QuestionsClass.vue';
+// import service from './service/serviceTwo.vue';
+// import priceTable from './price/priceTwo.vue';
+import team from './team/team.vue';
+import faq from './faq/faq.vue';
+import Header from './common/Header.vue';
+import Footer from './common/Footer.vue';
+import Contact from './common/contact.vue';
 
 export default {
-  name: 'Home',
-  props: {
-    msg: String,
+  metaInfo: {
+    bodyAttrs: {
+      class: ['landing-gradient-slight-ocean'],
+    },
   },
   components: {
-    Cloud,
-    NavigationBar,
-  },
-  methods: {
-    getIconUrl() {
-      // eslint-disable-next-line global-require
-      const url = require('../assets/images/LearnwithPely.png');
-      return url;
-    },
+    dxHeader: Header,
+    dxFooter: Footer,
+    dxContact: Contact,
+    dxIntro: intro,
+    QuestionsClass,
+    // dxService: service,
+    // dxPriceTable: priceTable,
+    dxTeam: team,
+    dxFaq: faq,
   },
 };
 </script>
-
-<!-- Add 'scoped' attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 0px 0 0;
-}
-a {
-  color: #42b983;
-}
-</style>

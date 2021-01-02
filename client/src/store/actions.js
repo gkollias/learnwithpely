@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 import {
   SET_USER,
   SET_QUESTIONS,
@@ -36,7 +37,8 @@ function getUserInfo(commit, user) {
     name: user.name,
   };
   const path = '/api/user/info';
-  axios.post(path, payload)
+  axios
+    .post(path, payload)
     .then((res) => {
       commit(SET_USER, res.data.user_info);
       commit(SET_SCORE, res.data.user_score);
@@ -53,9 +55,9 @@ function incrementUserScore(userId, increment) {
     score_increment: increment,
   };
   const path = '/api/user/score/increment';
-  axios.put(path, payload)
-    .then(() => {
-    })
+  axios
+    .put(path, payload)
+    .then(() => {})
     .catch((error) => {
       // eslint-disable-next-line
       console.error(error);
@@ -63,7 +65,6 @@ function incrementUserScore(userId, increment) {
 }
 
 export default {
-
   setUser({ commit }, user) {
     if (user) {
       getUserInfo(commit, user);
@@ -85,7 +86,9 @@ export default {
   },
 
   incrementScore({ commit, state }, inc) {
-    incrementUserScore(state.user.id, inc);
+    if (!_.isEmpty(state.user)) {
+      incrementUserScore(state.user.id, inc);
+    }
     commit(INCREMENT_SCORE, inc);
   },
 

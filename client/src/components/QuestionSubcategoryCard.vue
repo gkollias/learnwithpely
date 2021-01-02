@@ -6,22 +6,32 @@
       class="mb-2"
     >
       <b-card-text>
-        {{ this.subtitle }}
+        {{ subtitle }}
         <b-form-select
           id="form-question-subcategory-input"
           v-model="selectedSubcategoryId"
           required
           placeholder="Enter question subcategory"
         >
-        <option v-for="qc in questionSubcategories"
-          :value="qc.id" :key="qc.id">{{ qc.name }}
+          <option
+            v-for="qc in questionSubcategories"
+            :key="qc.id"
+            :value="qc.id"
+          >
+            {{ qc.name }}
           </option>
         </b-form-select>
       </b-card-text>
-      <b-button @click="getQuestions" variant="primary">{{this.ctaBtnText}}</b-button>
+      <b-button
+        variant="primary"
+        :disabled="!selectedSubcategoryId"
+        @click="getQuestions"
+      >
+        {{ ctaBtnText }}
+      </b-button>
     </b-card>
     <div v-if="showNoResults">
-      {{ this.noResultsText() }}
+      {{ noResultsText() }}
     </div>
   </div>
 </template>
@@ -33,8 +43,13 @@ import { mapActions, mapState } from 'vuex';
 
 import store from '../store';
 
-
 export default {
+  props: {
+    classId: {
+      type: String,
+      default: '0',
+    },
+  },
   data() {
     return {
       questionType: '',
@@ -62,13 +77,20 @@ export default {
       return 'Πάμε!';
     },
   },
+  created() {
+    this.getQuestionSubcategories();
+  },
   methods: {
     getQ() {
       return this.questions[0] ? this.questions[0].question : 'empty';
     },
     getQuestions() {
-      const path = `/api/questions/subcategory/${this.selectedSubcategoryId}`;
-      axios.get(path)
+      const path = '/api/questions/filter';
+      const payload = {
+        class_id: this.classId,
+        subcategory_id: this.selectedSubcategoryId,
+      };
+      axios.post(path, payload)
         .then((res) => {
           // eslint-disable-next-line no-console
           // console.log(JSON.stringify(res));
@@ -102,9 +124,6 @@ export default {
     noResultsText() {
       return 'Δεν υπάρχουν αποτελέσματα για αυτή την υποκατηγορία, παρακαλώ επιλέξτε μία άλλη.';
     },
-  },
-  created() {
-    this.getQuestionSubcategories();
   },
 };
 </script>

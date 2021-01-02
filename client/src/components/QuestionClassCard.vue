@@ -6,22 +6,31 @@
       class="mb-2"
     >
       <b-card-text>
-        {{ this.subtitle }}
+        {{ subtitle }}
         <b-form-select
           id="form-question-class-input"
           v-model="selectedClassId"
           required
           placeholder="Enter question class"
         >
-        <option v-for="qc in questionClasses"
-          :value="qc.id" :key="qc.id">{{ qc.name }}
+          <option
+            v-for="qc in questionClasses"
+            :key="qc.id"
+            :value="qc.id"
+          >
+            {{ qc.name }}
           </option>
         </b-form-select>
       </b-card-text>
-      <b-button @click="getQuestions" variant="primary">{{this.ctaBtnText}}</b-button>
+      <b-button
+        variant="primary"
+        @click="getQuestions"
+      >
+        {{ ctaBtnText }}
+      </b-button>
     </b-card>
     <div v-if="showNoResults">
-      {{ this.noResultsText() }}
+      {{ noResultsText() }}
     </div>
   </div>
 </template>
@@ -32,7 +41,6 @@ import 'es6-promise/auto';
 import { mapActions, mapState } from 'vuex';
 
 import store from '../store';
-
 
 export default {
   data() {
@@ -61,6 +69,9 @@ export default {
     ctaBtnText() {
       return 'Πάμε!';
     },
+  },
+  created() {
+    this.getQuestionClasses();
   },
   methods: {
     getQ() {
@@ -102,9 +113,6 @@ export default {
     noResultsText() {
       return 'Δεν υπάρχουν αποτελέσματα για αυτή την τάξη, παρακαλώ επιλέξτε μία άλλη.';
     },
-  },
-  created() {
-    this.getQuestionClasses();
   },
 };
 </script>

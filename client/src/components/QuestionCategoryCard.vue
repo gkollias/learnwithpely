@@ -2,26 +2,37 @@
   <div class="question_category__main">
     <b-card
       :title="title"
+      style="max-height: 20rem;max-width: 30rem;"
       tag="article"
       class="mb-2"
     >
       <b-card-text>
-        {{ this.subtitle }}
+        {{ subtitle }}
         <b-form-select
           id="form-question-category-input"
           v-model="selectedCategoryId"
           required
           placeholder="Enter question category"
         >
-        <option v-for="qc in questionCategories"
-          :value="qc.id" :key="qc.id">{{ qc.name }}
+          <option
+            v-for="qc in questionCategories"
+            :key="qc.id"
+            :value="qc.id"
+          >
+            {{ qc.name }}
           </option>
         </b-form-select>
       </b-card-text>
-      <b-button @click="getQuestions" variant="primary">{{this.ctaBtnText}}</b-button>
+      <b-button
+        variant="primary"
+        :disabled="!selectedCategoryId"
+        @click="getQuestions"
+      >
+        {{ ctaBtnText }}
+      </b-button>
     </b-card>
     <div v-if="showNoResults">
-      {{ this.noResultsText() }}
+      {{ noResultsText() }}
     </div>
   </div>
 </template>
@@ -33,8 +44,15 @@ import { mapActions, mapState } from 'vuex';
 
 import store from '../store';
 
+const categoryIconConst = require('../assets/images/book-note-paper.png');
 
 export default {
+  props: {
+    classId: {
+      type: String,
+      default: '0',
+    },
+  },
   data() {
     return {
       questionType: '',
@@ -61,14 +79,24 @@ export default {
     ctaBtnText() {
       return 'Πάμε!';
     },
+    categoryIcon() {
+      return categoryIconConst;
+    },
+  },
+  created() {
+    this.getQuestionCategories();
   },
   methods: {
     getQ() {
       return this.questions[0] ? this.questions[0].question : 'empty';
     },
     getQuestions() {
-      const path = `/api/questions/category/${this.selectedCategoryId}`;
-      axios.get(path)
+      const path = '/api/questions/filter';
+      const payload = {
+        class_id: this.classId,
+        category_id: this.selectedCategoryId,
+      };
+      axios.post(path, payload)
         .then((res) => {
           // eslint-disable-next-line no-console
           // console.log(JSON.stringify(res));
@@ -102,9 +130,6 @@ export default {
     noResultsText() {
       return 'Δεν υπάρχουν αποτελέσματα για αυτή την κατηγορία, παρακαλώ επιλέξτε μία άλλη.';
     },
-  },
-  created() {
-    this.getQuestionCategories();
   },
 };
 </script>

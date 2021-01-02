@@ -21,7 +21,7 @@ export default new Router({
       component: QuestionManagement,
     },
     {
-      path: '/classQuestion/:cq',
+      path: '/classQuestion/:classQuestion',
       name: 'classQuestion',
       component: ClassQuestion,
     },
