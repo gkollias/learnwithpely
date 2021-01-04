@@ -172,11 +172,11 @@ export default {
       } else {
         this.storeAnsweredQuestion(false);
       }
-      this.selectedAnswer = '';
     },
     nextQuestion() {
       store.dispatch('setNextQuestion');
       this.questionAnswered = false;
+      this.selectedAnswer = '';
     },
     storeAnsweredQuestion(isCorrect) {
       if (_.isEmpty(this.user)) {
