@@ -1,10 +1,10 @@
 FROM node:11.12.0-alpine as learn-with-pely
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
-COPY ./client/package*.json ./
-RUN npm install
+COPY ./client/package.json ./client/yarn.lock ./
+RUN yarn install
 COPY ./client .
-RUN npm run build
+RUN yarn build
 
 # production
 FROM nginx:stable-alpine as production
