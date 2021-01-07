@@ -36,7 +36,7 @@
                   <h4 class="card-title pt-2 font-weight-medium">
                     Α' Δημοτικού
                   </h4>
-                  <p>TBD</p>
+                  <!-- <p>TBD</p> -->
                 </b-card>
               </router-link>
             </b-col>
@@ -51,7 +51,7 @@
                   <h4 class="card-title pt-2 font-weight-medium">
                     Β' Δημοτικού
                   </h4>
-                  <p>TBD</p>
+                  <!-- <p>TBD</p> -->
                 </b-card>
               </router-link>
             </b-col>
@@ -66,7 +66,7 @@
                   <h4 class="card-title pt-2 font-weight-medium">
                     Γ' Δημοτικού
                   </h4>
-                  <p>TBD</p>
+                  <!-- <p>TBD</p> -->
                 </b-card>
               </router-link>
             </b-col>
@@ -81,7 +81,7 @@
                   <h4 class="card-title pt-2 font-weight-medium">
                     Δ' Δημοτικού
                   </h4>
-                  <p>TBD</p>
+                  <!-- <p>TBD</p> -->
                 </b-card>
               </router-link>
             </b-col>
@@ -96,7 +96,7 @@
                   <h4 class="card-title pt-2 font-weight-medium">
                     Ε' Δημοτικού
                   </h4>
-                  <p>TBD</p>
+                  <!-- <p>TBD</p> -->
                 </b-card>
               </router-link>
             </b-col>
@@ -111,7 +111,7 @@
                   <h4 class="card-title pt-2 font-weight-medium">
                     ΣΤ' Δημοτικού
                   </h4>
-                  <p>TBD</p>
+                  <!-- <p>TBD</p> -->
                 </b-card>
               </router-link>
             </b-col>

@@ -26,6 +26,7 @@
             <button
               type="button"
               class="close"
+              @click="closeInfo"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -35,15 +36,16 @@
           <form
             class="row form"
             role="form"
+            @submit.prevent="sendEmail"
           >
             <div class="form-group mb-4 col-md-6">
               <label for="">
                 <i class="eva eva-person-outline" />
               </label>
               <input
-                id=""
+                id="user_name"
                 type="text"
-                name="Name"
+                name="user_name"
                 class="form-control"
                 placeholder="Το όνομά σου"
                 required
@@ -54,9 +56,9 @@
                 <i class="eva eva-email-outline" />
               </label>
               <input
-                type="email"
+                type="user_email"
                 required
-                name="email"
+                name="user_email"
                 class="form-control"
                 placeholder="Το email σου"
                 aria-describedby="helpId"
@@ -118,10 +120,38 @@
 </template>
 
 <script>
+import emailjs from 'emailjs-com';
+
+// init('user_rSSzFCqty0p8h0RwkAxpL');
+
 export default {
+  data() {
+    return {
+      emailSent: false,
+    };
+  },
   computed: {
     successfullySent() {
-      return false;
+      return this.emailSent;
+    },
+  },
+  methods: {
+    sendEmail(e) {
+      emailjs.sendForm('service_nfeno1b', 'template_vat1qjn', e.target, 'user_rSSzFCqty0p8h0RwkAxpL')
+        .then((result) => {
+          // eslint-disable-next-line no-console
+          console.log('SUCCESS!', result.status, result.text);
+          this.emailSent = true;
+          setTimeout(() => {
+            this.emailSent = false;
+          }, 3000);
+        }, (error) => {
+          // eslint-disable-next-line no-console
+          console.log('FAILED...', error);
+        });
+    },
+    closeInfo() {
+      this.emailSent = false;
     },
   },
 };

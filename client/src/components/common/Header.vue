@@ -62,7 +62,14 @@
             v-if="!$auth.loading && $auth.isAuthenticated"
             class="nav-item pl-3"
           >
-            <a class="score">{{ scoreText }} {{ userScore }}</a>
+            <a class="score">
+              {{ scoreText }}
+              <animated-number
+                :value="userScore"
+                :format-value="formatToPrice"
+                :duration="300"
+              />
+            </a>
           </li>
           <li
             v-if="!$auth.loading && !$auth.isAuthenticated"
@@ -181,10 +188,14 @@
 import Vue from 'vue';
 import 'es6-promise/auto';
 import Vuex, { mapActions, mapState } from 'vuex';
+import AnimatedNumber from 'animated-number-vue';
 
 Vue.use(Vuex);
 
 export default {
+  components: {
+    AnimatedNumber,
+  },
   data() {
     return {
       link: {
@@ -242,6 +253,9 @@ export default {
       // eslint-disable-next-line no-console
       // console.log(JSON.stringify(this.$auth.user));
       return this.$auth && this.$auth.user && this.$auth.user.name;
+    },
+    formatToPrice(value) {
+      return `${Number(value).toFixed(2)}`;
     },
   },
 };

@@ -2,6 +2,10 @@
   <div class="question_subcategory__main">
     <b-card
       :title="title"
+      :img-src="subcategoryIcon"
+      img-alt="Image"
+      img-top
+      style="width: 100%;max-width:300px;padding:20px; height: auto;"
       tag="article"
       class="mb-2"
     >
@@ -43,6 +47,8 @@ import { mapActions, mapState } from 'vuex';
 
 import store from '../store';
 
+const subcategoryIconConst = require('../assets/images/triangle.png');
+
 export default {
   props: {
     classId: {
@@ -75,6 +81,9 @@ export default {
     },
     ctaBtnText() {
       return 'Πάμε!';
+    },
+    subcategoryIcon() {
+      return subcategoryIconConst;
     },
   },
   created() {

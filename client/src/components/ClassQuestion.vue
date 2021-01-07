@@ -11,7 +11,7 @@
       </div>
       <div
         v-else
-        class="d-flex justify-content-between"
+        class="d-flex justify-content-around"
       >
         <QuestionCategoryCard :class-id="classQuestion" />
         <QuestionSubcategoryCard :class-id="classQuestion" />
@@ -31,6 +31,7 @@ import Intro from './intros/introCut.vue';
 import Question from './Question.vue';
 import QuestionCategoryCard from './QuestionCategoryCard.vue';
 import QuestionSubcategoryCard from './QuestionSubcategoryCard.vue';
+import 'animate.css';
 
 export default {
   name: 'ClassQuestion',

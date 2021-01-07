@@ -43,6 +43,28 @@
           :class="answerImageStyle"
           class="mb-2 question-card__answer"
         >
+          <!-- <transition
+            appear
+            enter-active-class="animate__animated animate__bounceOutUp"
+          >
+            <h2
+              :v-if="questionAnswered"
+              style="text-align:center"
+            >
+              +100!
+            </h2>
+          </transition> -->
+          <transition
+            appear
+            enter-active-class="animate__animated animate__bounceOutUp"
+          >
+            <p
+              v-if="checkAnswerCorrectness && questionAnswered"
+              class="question-card__score-transition"
+            >
+              +100!
+            </p>
+          </transition>
           <b-card-text>
             {{ answerOutcomeText }} {{ getCorrectAnswer }}
 
@@ -110,7 +132,7 @@ export default {
     },
     checkAnswerCorrectness() {
       if (_.isEmpty(this.question)) {
-        return '';
+        return false;
       }
       if (!this.selectedAnswer) {
         return false;
@@ -212,6 +234,15 @@ export default {
 
 .question-card__answer-wrong{
   background-color: rgb(255, 121, 121)!important;
+}
+
+.question-card__score-transition {
+  text-align: center;
+}
+
+.animate__animated.animate__bounceOutUp {
+  animation-duration: 2s;
+  text-align: center;
 }
 
 </style>

@@ -2,7 +2,10 @@
   <div class="question_category__main">
     <b-card
       :title="title"
-      style="max-height: 20rem;max-width: 30rem;"
+      :img-src="categoryIcon"
+      img-alt="Image"
+      img-top
+      style="width: 100%;max-width:300px;padding:20px; height: auto;"
       tag="article"
       class="mb-2"
     >
