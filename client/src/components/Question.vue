@@ -47,24 +47,13 @@
             appear
             enter-active-class="animate__animated animate__bounceOutUp"
           >
-            <h2
-              :v-if="questionAnswered"
-              style="text-align:center"
-            >
-              +100!
-            </h2>
-          </transition> -->
-          <transition
-            appear
-            enter-active-class="animate__animated animate__bounceOutUp"
-          >
             <p
               v-if="checkAnswerCorrectness && questionAnswered"
               class="question-card__score-transition"
             >
               +100!
             </p>
-          </transition>
+          </transition> -->
           <b-card-text>
             {{ answerOutcomeText }} {{ getCorrectAnswer }}
 
@@ -95,6 +84,7 @@ import axios from 'axios';
 import { mapActions, mapState } from 'vuex';
 import _ from 'lodash';
 import '@lottiefiles/lottie-player';
+import floating from 'floating.js';
 import FlipCard from './FlipCard.vue';
 import store from '../store';
 
@@ -190,6 +180,14 @@ export default {
       this.questionAnswered = true;
       if (this.checkAnswerCorrectness) {
         store.dispatch('incrementScore', 10);
+        floating({
+          content: '<a style="">💯</a>',
+          number: 3,
+          duration: 3,
+          repeat: 1,
+          size: 5,
+          direction: 'normal',
+        });
         this.storeAnsweredQuestion(true);
       } else {
         this.storeAnsweredQuestion(false);

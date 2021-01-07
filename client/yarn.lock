@@ -4614,6 +4614,11 @@ flatted@^3.1.0:
   resolved "https://registry.npmjs.org/flatted/-/flatted-3.1.0.tgz#a5d06b4a8b01e3a63771daa5cb7a1903e2e57067"
   integrity sha512-tW+UkmtNg/jv9CSofAKvgVcO7c2URjhTdW1ZTkcAritblu8tajiYy7YisnIflEwtKssCtOxpnBRoCB7iap0/TA==
 
+floating.js@^2.7.4:
+  version "2.7.4"
+  resolved "https://registry.npmjs.org/floating.js/-/floating.js-2.7.4.tgz#89dc19298c8b8be1f3d0e21d79402d8856bb5e0e"
+  integrity sha1-idwZKYyLi+Hz0OIdeUAtiFa7Xg4=
+
 flush-write-stream@^1.0.0:
   version "1.1.1"
   resolved "https://registry.npmjs.org/flush-write-stream/-/flush-write-stream-1.1.1.tgz#8dd7d873a1babc207d94ead0c2e0e44276ebf2e8"

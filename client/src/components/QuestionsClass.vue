@@ -115,6 +115,21 @@
                 </b-card>
               </router-link>
             </b-col>
+            <b-col
+              md="6"
+              sm="6"
+              class="mb-4"
+            >
+              <router-link :to="classQuestionUrl('0')">
+                <b-card class=" text-center">
+                  <i class="eva eva-clock-outline text-36" />
+                  <h4 class="card-title pt-2 font-weight-medium">
+                    Μαθαίνω Ελληνικά
+                  </h4>
+                  <!-- <p>TBD</p> -->
+                </b-card>
+              </router-link>
+            </b-col>
           </b-row>
         </b-col>
         <!-- end of col-6 -->
