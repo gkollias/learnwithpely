@@ -179,7 +179,7 @@ export default {
     answerClick() {
       this.questionAnswered = true;
       if (this.checkAnswerCorrectness) {
-        store.dispatch('incrementScore', 10);
+        store.dispatch('incrementScore', 100);
         floating({
           content: '<a style="">💯</a>',
           number: 3,
