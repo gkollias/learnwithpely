@@ -11,10 +11,14 @@
     >
       <b-navbar-brand href="#">
         <div class="logo">
-          <img
-            src="@/assets/images/logos/Learn with Pely Logo.png"
-            alt=""
+          <router-link
+            to="/"
           >
+            <img
+              src="@/assets/images/logos/Learn with Pely Logo.png"
+              alt=""
+            >
+          </router-link>
         </div>
       </b-navbar-brand>
 
