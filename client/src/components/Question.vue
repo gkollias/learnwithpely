@@ -227,11 +227,11 @@ export default {
 }
 
 .question-card__answer-correct{
-  background-color: rgb(87, 233, 87)!important;
+  background-color: #37B890!important;
 }
 
 .question-card__answer-wrong{
-  background-color: rgb(255, 121, 121)!important;
+  background-color: #E04026!important;
 }
 
 .question-card__score-transition {
