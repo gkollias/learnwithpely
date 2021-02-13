@@ -3,6 +3,7 @@
   <section
     id="contacts-wrap"
     class="contact-form-wrap light-gray p-t-b-80"
+    anchor="contacts-wrap"
   >
     <b-container>
       <b-row>

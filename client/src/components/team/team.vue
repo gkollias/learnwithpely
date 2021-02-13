@@ -42,12 +42,13 @@
                 {{ member.job }}
               </p>
               <p>{{ member.desc }}</p>
-              <button
+              <a
+                v-smooth-scroll
                 class="btn half-button btn-gradient"
-                @click="href='mailto:' + member.email"
+                href="#contacts-wrap"
               >
                 Contact
-              </button>
+              </a>
               <!-- <div class="card-socials-simple mt-4">
                 <a
                   href=""
@@ -85,7 +86,7 @@ export default {
     return {
       members: [
         {
-          name: 'Pely Korre',
+          name: 'Pelagia Korre',
           job: 'Head Teacher/ Product Manager',
           desc: '',
           email: 'pelagiakorre@gmail.com',
