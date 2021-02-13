@@ -117,7 +117,7 @@
               <span>{{ getUserName() }}</span>
             </a>
             <ul>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a
                   v-smooth-scroll
                   href="#"
@@ -130,7 +130,7 @@
                   href="#"
                   class="menu-item"
                 >Settings</a>
-              </li>
+              </li> -->
               <li
                 class="nav-item"
                 @click="logout"

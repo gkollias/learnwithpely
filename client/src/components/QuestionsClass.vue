@@ -32,7 +32,7 @@
             >
               <router-link :to="classQuestionUrl('1')">
                 <b-card class=" text-center">
-                  <i class="eva eva-clock-outline text-36" />
+                  <i class="eva eva-edit-outline text-36" />
                   <h4 class="card-title pt-2 font-weight-medium">
                     Α' Δημοτικού
                   </h4>
@@ -47,7 +47,7 @@
             >
               <router-link :to="classQuestionUrl('2')">
                 <b-card class=" text-center">
-                  <i class="eva eva-clock-outline text-36" />
+                  <i class="eva eva-arrowhead-up-outline text-36" />
                   <h4 class="card-title pt-2 font-weight-medium">
                     Β' Δημοτικού
                   </h4>
@@ -62,7 +62,7 @@
             >
               <router-link :to="classQuestionUrl('3')">
                 <b-card class=" text-center">
-                  <i class="eva eva-clock-outline text-36" />
+                  <i class="eva eva-bar-chart-2-outline text-36" />
                   <h4 class="card-title pt-2 font-weight-medium">
                     Γ' Δημοτικού
                   </h4>
@@ -77,7 +77,7 @@
             >
               <router-link :to="classQuestionUrl('4')">
                 <b-card class=" text-center">
-                  <i class="eva eva-clock-outline text-36" />
+                  <i class="eva eva-grid-outline text-36" />
                   <h4 class="card-title pt-2 font-weight-medium">
                     Δ' Δημοτικού
                   </h4>
@@ -92,7 +92,7 @@
             >
               <router-link :to="classQuestionUrl('5')">
                 <b-card class=" text-center">
-                  <i class="eva eva-clock-outline text-36" />
+                  <i class="eva eva-pantone-outline text-36" />
                   <h4 class="card-title pt-2 font-weight-medium">
                     Ε' Δημοτικού
                   </h4>
@@ -107,7 +107,7 @@
             >
               <router-link :to="classQuestionUrl('6')">
                 <b-card class=" text-center">
-                  <i class="eva eva-clock-outline text-36" />
+                  <i class="eva eva-award-outline text-36" />
                   <h4 class="card-title pt-2 font-weight-medium">
                     ΣΤ' Δημοτικού
                   </h4>
@@ -122,7 +122,7 @@
             >
               <router-link :to="classQuestionUrl('0')">
                 <b-card class=" text-center">
-                  <i class="eva eva-clock-outline text-36" />
+                  <i class="eva eva-globe-outline text-36" />
                   <h4 class="card-title pt-2 font-weight-medium">
                     Μαθαίνω Ελληνικά
                   </h4>
@@ -140,7 +140,7 @@
           class="offset-lg-1 d-flex align-items-center"
         >
           <img
-            src="@/assets/images/landing/svg/features2.svg"
+            src="@/assets/images/landing/svg/v2-header-2.svg"
             class="img-responsive w-100"
             alt=""
           >
