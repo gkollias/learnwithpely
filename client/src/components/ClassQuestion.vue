@@ -7,7 +7,10 @@
         v-if="showQuestions"
         class="d-flex justify-content-center"
       >
-        <Question :id="currentQuestionId" />
+        <Question
+          :id="currentQuestionId"
+          :speed-matters="false"
+        />
       </div>
       <div
         v-else
@@ -15,6 +18,7 @@
       >
         <QuestionCategoryCard :class-id="classQuestion" />
         <QuestionSubcategoryCard :class-id="classQuestion" />
+        <QuestionChapterCard :class-id="classQuestion" />
       </div>
     </div>
     <Footer />
@@ -31,6 +35,7 @@ import Intro from './intros/introCut.vue';
 import Question from './Question.vue';
 import QuestionCategoryCard from './QuestionCategoryCard.vue';
 import QuestionSubcategoryCard from './QuestionSubcategoryCard.vue';
+import QuestionChapterCard from './QuestionChapterCard.vue';
 import 'animate.css';
 
 export default {
@@ -47,6 +52,7 @@ export default {
     Question,
     QuestionCategoryCard,
     QuestionSubcategoryCard,
+    QuestionChapterCard,
   },
   data() {
     return {

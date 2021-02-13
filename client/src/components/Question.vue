@@ -1,5 +1,32 @@
 <template>
   <div>
+    <div>
+      <div
+        v-if="speedMatters"
+        class="row pt-5"
+      >
+        <div class="col-md-12 text-center pt-5">
+          <!-- <b-progress
+            :max="max"
+            height="2rem"
+            show-progress
+          >
+            <b-progress-bar
+              :value="value"
+              variant="success"
+            >
+              <h5 v-if="value > 1">
+                Time Bonus {{ timerBonus }}
+              </h5>
+            </b-progress-bar>
+          </b-progress> -->
+          <Countdown
+            :restart-timer="restartTimer"
+            :timer-stopped="timerStopped"
+          />
+        </div>
+      </div>
+    </div>
     <FlipCard
       v-if="question"
       :flipped="questionAnswered"
@@ -86,16 +113,22 @@ import _ from 'lodash';
 import '@lottiefiles/lottie-player';
 import floating from 'floating.js';
 import FlipCard from './FlipCard.vue';
+import Countdown from './Countdown.vue';
 import store from '../store';
 
 export default {
   components: {
     FlipCard,
+    Countdown,
   },
   props: {
     id: {
       type: Number,
       default: 0,
+    },
+    speedMatters: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -108,7 +141,11 @@ export default {
         height: 75,
         class: 'imgClass',
       },
-
+      timerBonus: 100,
+      value: 0,
+      max: 100,
+      restartTimer: false,
+      timerStopped: false,
     };
   },
   computed: {
@@ -164,6 +201,9 @@ export default {
   created() {
     this.getQuestion(this.id);
   },
+  mounted() {
+    this.startTimer();
+  },
   methods: {
     getQuestion(id) {
       const path = `/api/questions/${id}`;
@@ -178,6 +218,7 @@ export default {
     },
     answerClick() {
       this.questionAnswered = true;
+      this.timerStopped = true;
       if (this.checkAnswerCorrectness) {
         store.dispatch('incrementScore', 100);
         floating({
@@ -197,6 +238,8 @@ export default {
       store.dispatch('setNextQuestion');
       this.questionAnswered = false;
       this.selectedAnswer = '';
+      this.restartTimer = !this.restartTimer;
+      this.timerStopped = false;
     },
     storeAnsweredQuestion(isCorrect) {
       if (_.isEmpty(this.user)) {
@@ -215,6 +258,13 @@ export default {
           // eslint-disable-next-line
           console.error(error);
         });
+    },
+    startTimer() {
+      const timerBonus = setInterval(() => {
+        this.value += 5;
+        this.timerBonus -= 5;
+        if (this.value >= 100) clearInterval(timerBonus);
+      }, 150);
     },
   },
 };

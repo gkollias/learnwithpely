@@ -279,6 +279,7 @@ def questions_filter():
     class_id = post_data.get('class_id')
     category_id = post_data.get('category_id')
     subcategory_id = post_data.get('subcategory_id')
+    chapter_id = post_data.get('chapter_id')
     if class_id != None:
         questions = set(Question.query.filter_by(question_class_id=class_id).all())
     if category_id != None:
@@ -293,6 +294,13 @@ def questions_filter():
             questions = questions.intersection(q_subcategory)
         else:
             questions = q_subcategory
+
+    if chapter_id != None:
+        q_chapter = set(Question.query.filter_by(question_chapter=chapter_id).all())
+        if questions != None:
+            questions = questions.intersection(q_chapter)
+        else:
+            questions = q_chapter
 
     if questions == None:
         response_object['message'] = 'class,category,subcategory does not exist!'
@@ -315,6 +323,17 @@ def all_question_subcategories():
     response_object = {'status': 'success'}
     question_subcategory_schema = QuestionSubcategorySchema()
     response_object['question_subcategories'] = question_subcategory_schema.dump(QuestionSubcategory.query.all(), many= True)
+    return jsonify(response_object)
+
+@app.route('/api/questionChapters', methods=['GET'])
+def all_question_chapters():
+    response_object = {'status': 'success'}
+    chapters = []
+    for q in Question.query.distinct(Question.question_chapter):
+        chapters.append(q.question_chapter)
+
+    response_object['question_chapters'] = chapters
+
     return jsonify(response_object)
 
 @app.route('/api/questionClasses', methods=['GET'])
