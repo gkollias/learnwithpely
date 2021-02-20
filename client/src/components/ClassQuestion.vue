@@ -16,9 +16,7 @@
         v-else
         class="d-flex justify-content-around"
       >
-        <QuestionCategoryCard :class-id="classQuestion" />
-        <QuestionSubcategoryCard :class-id="classQuestion" />
-        <QuestionChapterCard :class-id="classQuestion" />
+        <QuestionFilteringCard :class-id="classQuestion" />
       </div>
     </div>
     <Footer />
@@ -33,9 +31,7 @@ import Header from './common/Header.vue';
 import Footer from './common/Footer.vue';
 import Intro from './intros/introCut.vue';
 import Question from './Question.vue';
-import QuestionCategoryCard from './QuestionCategoryCard.vue';
-import QuestionSubcategoryCard from './QuestionSubcategoryCard.vue';
-import QuestionChapterCard from './QuestionChapterCard.vue';
+import QuestionFilteringCard from './QuestionFilteringCard.vue';
 import 'animate.css';
 
 export default {
@@ -50,9 +46,7 @@ export default {
     Footer,
     Intro,
     Question,
-    QuestionCategoryCard,
-    QuestionSubcategoryCard,
-    QuestionChapterCard,
+    QuestionFilteringCard,
   },
   data() {
     return {
