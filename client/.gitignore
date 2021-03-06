@@ -20,4 +20,4 @@ yarn-error.log*
 *.sln
 *.sw?
 
-auto_config.json*
+auto_config.json
