@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+
+    learn-with-pely:
+        container_name: learn-with-pely
+        build:
+          context: .
+          dockerfile: Dockerfile
+        volumes:
+          - '.:/app'
+          - '/app/node_modules'
+        restart: always
+        ports:
+          - '8007:8765'
