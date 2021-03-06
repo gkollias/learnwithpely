@@ -1,7 +1,28 @@
 .DS_Store
-node_modules/
-/dist/
-env/
-__pycache__
-*.pyc
+client/node_modules/
+client/dist/
 client/auto_config.json
+
+server/env/
+server/__pycache__
+*.pyc
+
+.DS_Store
+
+# local env files
+server/.env.local
+server/.env.*.local
+
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
