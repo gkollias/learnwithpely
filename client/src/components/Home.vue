@@ -3,7 +3,7 @@
     <dx-header />
     <dxIntro />
     <QuestionsClass />
-    <!-- <dx-service /> -->
+    <!-- <GamesCarousel /> -->
     <!-- <dx-priceTable /> -->
     <dx-team />
     <dx-faq />
@@ -15,7 +15,7 @@
 
 import intro from './intros/introFive.vue';
 import QuestionsClass from './QuestionsClass.vue';
-// import service from './service/serviceTwo.vue';
+// import GamesCarousel from './games/gamesCarousel.vue';
 // import priceTable from './price/priceTwo.vue';
 import team from './team/team.vue';
 import faq from './faq/faq.vue';
@@ -35,7 +35,7 @@ export default {
     dxContact: Contact,
     dxIntro: intro,
     QuestionsClass,
-    // dxService: service,
+    // GamesCarousel,
     // dxPriceTable: priceTable,
     dxTeam: team,
     dxFaq: faq,

@@ -155,7 +155,7 @@
           <!-- <li class="nav-item">
             <a
               v-smooth-scroll
-              href="#services-wrap"
+              href="#games-wrap"
               class="m-2"
             >Services</a>
           </li> -->

@@ -23551,36 +23551,36 @@ button.ul-accordion__link {
     .work-carousel-wrap .card .card-footer a.text-dark {
       line-height: 10px; }
 
-.services-wrap {
+.games-wrap {
   padding: 80px 0px; }
-  .services-wrap .section-header p {
+  .games-wrap .section-header p {
     max-width: 600px; }
-  .services-wrap .service-wrap .card .card-header {
+  .games-wrap .game-wrap .card .card-header {
     border-color: transparent;
     height: 170px; }
-    .services-wrap .service-wrap .card .card-header img {
+    .games-wrap .game-wrap .card .card-header img {
       object-fit: cover;
       height: 100%;
       width: 100%; }
-  .services-wrap .service-wrap .card .card-footer {
+  .games-wrap .game-wrap .card .card-footer {
     background: transparent; }
-    .services-wrap .service-wrap .card .card-footer a.text-dark {
+    .games-wrap .game-wrap .card .card-footer a.text-dark {
       line-height: 10px; }
 
-.services-caurosel-wrap {
+.games-caurosel-wrap {
   padding: 80px 0px; }
-  .services-caurosel-wrap .section-header p {
+  .games-caurosel-wrap .section-header p {
     max-width: 600px; }
-  .services-caurosel-wrap .service-wrap .card .card-header {
+  .games-caurosel-wrap .game-wrap .card .card-header {
     border-color: transparent;
     height: 170px; }
-    .services-caurosel-wrap .service-wrap .card .card-header img {
+    .games-caurosel-wrap .game-wrap .card .card-header img {
       object-fit: cover;
       height: 100%;
       width: 100%; }
-  .services-caurosel-wrap .service-wrap .card .card-footer {
+  .games-caurosel-wrap .game-wrap .card .card-footer {
     background: transparent; }
-    .services-caurosel-wrap .service-wrap .card .card-footer a.text-dark {
+    .games-caurosel-wrap .game-wrap .card .card-footer a.text-dark {
       line-height: 10px; }
 
 .testimonial-wrap .card .card-body .card-img-top {
@@ -23893,17 +23893,17 @@ button.ul-accordion__link {
     color: #00aff0;
     -webkit-text-fill-color: #00aff0 !important; }
 
-.service-three--hover {
+.game-three--hover {
   height: 100%; }
 
-.service-three--hover {
+.game-three--hover {
   height: 100%; }
-  .service-three--hover .card-header {
+  .game-three--hover .card-header {
     height: 250px; }
-    .service-three--hover .card-header img {
+    .game-three--hover .card-header img {
       height: 100%; }
 
-.service-three--hover:hover {
+.game-three--hover:hover {
   transform: translateY(-20px);
   transition: 0.3s ease-in; }
 
