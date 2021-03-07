@@ -430,6 +430,14 @@ def questions_answered(user_id):
 
     return jsonify(response_object)
 
+@app.route('/api/user/questions/answered/<user_id>/<question_id>', methods=['GET'])
+def question_answered(user_id, question_id):
+    response_object = {'status': 'success'}
+    user_question_answered_schema = UserQuestionAnsweredSchema()
+    response_object['questions_answered'] = user_question_answered_schema.dump(UserQuestionAnswered.query.filter_by(user_id=user_id).filter_by(question_id=question_id).all(), many= True)
+
+    return jsonify(response_object)
+
 @app.route('/api/user/questions/answered/add', methods=['POST'])
 def questions_answered_add():
     response_object = {'status': 'success'}

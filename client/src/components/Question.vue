@@ -146,6 +146,7 @@ export default {
       max: 100,
       restartTimer: false,
       timerStopped: false,
+      questionAnsweredCorrect: 0,
     };
   },
   computed: {
@@ -196,10 +197,12 @@ export default {
   watch: {
     id() {
       this.getQuestion(this.id);
+      this.getQuestionAnswered(this.user.id, this.id);
     },
   },
   created() {
     this.getQuestion(this.id);
+    this.getQuestionAnswered(this.user.id, this.id);
   },
   mounted() {
     this.startTimer();
@@ -216,19 +219,43 @@ export default {
           console.error(error);
         });
     },
+    getQuestionAnswered(userId, questionId) {
+      const path = `/api/user/questions/answered/${userId}/${questionId}`;
+      axios.get(path)
+        .then((res) => {
+          if (res.data.questions_answered
+            && res.data.questions_answered[0]
+            && res.data.questions_answered[0].times_correct) {
+            this.questionAnsweredCorrect = res.data.questions_answered[0].times_correct;
+          }
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
     answerClick() {
       this.questionAnswered = true;
       this.timerStopped = true;
       if (this.checkAnswerCorrectness) {
-        store.dispatch('incrementScore', 100);
-        floating({
-          content: '<a style="">💯</a>',
-          number: 3,
-          duration: 3,
-          repeat: 1,
-          size: 5,
-          direction: 'normal',
-        });
+        const pointsDecreased = this.questionAnsweredCorrect * 10;
+        let scoreIncrease = 100;
+        if (scoreIncrease >= pointsDecreased) {
+          scoreIncrease -= pointsDecreased;
+        } else {
+          scoreIncrease = 10;
+        }
+        store.dispatch('incrementScore', scoreIncrease);
+        if (scoreIncrease === 100) {
+          floating({
+            content: '<a style="">💯</a>',
+            number: 3,
+            duration: 3,
+            repeat: 1,
+            size: 5,
+            direction: 'normal',
+          });
+        }
         this.storeAnsweredQuestion(true);
       } else {
         this.storeAnsweredQuestion(false);
