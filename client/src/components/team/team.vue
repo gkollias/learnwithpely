@@ -79,7 +79,7 @@
 <script>
 
 const george = require('../../assets/images/faces/george.webp');
-const pely = require('../../assets/images/faces/pely.webp');
+const pely = require('../../assets/images/faces/pelagia_zurich.webp');
 
 export default {
   data() {
