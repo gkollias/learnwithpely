@@ -141,6 +141,8 @@ export default {
       const payload = {
         class_id: this.classId,
         category_id: this.selectedCategoryId,
+        subcategory_id: this.selectedSubcategoryId,
+        chapter_id: this.selectedChapterId,
       };
       axios.post(path, payload)
         .then((res) => {
