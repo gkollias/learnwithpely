@@ -8,9 +8,13 @@
         class="d-flex justify-content-center"
       >
         <Question
+          v-if="currentQuestionId"
           :id="currentQuestionId"
           :speed-matters="false"
         />
+        <div v-else>
+          <QuestionEnd />
+        </div>
       </div>
       <div
         v-else
@@ -31,6 +35,7 @@ import Header from './common/Header.vue';
 import Footer from './common/Footer.vue';
 import Intro from './intros/introCut.vue';
 import Question from './Question.vue';
+import QuestionEnd from './QuestionEnd.vue';
 import QuestionFilteringCard from './QuestionFilteringCard.vue';
 import 'animate.css';
 
@@ -46,6 +51,7 @@ export default {
     Footer,
     Intro,
     Question,
+    QuestionEnd,
     QuestionFilteringCard,
   },
   data() {
