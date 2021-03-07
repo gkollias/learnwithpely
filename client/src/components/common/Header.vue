@@ -15,13 +15,15 @@
             to="/"
           >
             <img
-              src="@/assets/images/logos/Learn with Pely Logo.png"
+              src="@/assets/images/logos/emoji_me.png"
               alt=""
             >
           </router-link>
         </div>
       </b-navbar-brand>
-
+      <b-navbar-brand class="mr-auto text-18 text-white">
+        Learn with me
+      </b-navbar-brand>
       <b-navbar-toggle
         target="nav-collapse"
         class="eva eva-menu-outline text-18 text-white"
