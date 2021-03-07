@@ -8,14 +8,22 @@ import vueSmoothScroll from 'vue2-smooth-scroll';
 import store from './store';
 import App from './App.vue';
 import router from './router';
-
-// Import the Auth0 configuration
-import { domain, clientId } from '../auto_config.json';
+import {
+  domainDev, clientIdDev, domainProd, clientIdProd,
+} from '../auth_config.json';
 // Import the plugin here
 import { Auth0Plugin } from './auth';
 import VueLand from './plugins/Vueland.kit';
-// import on your project (less then 1KB gziped)
 
+let domain;
+let clientId;
+if (process.env.NODE_ENV === 'production') {
+  domain = domainProd;
+  clientId = clientIdProd;
+} else {
+  domain = domainDev;
+  clientId = clientIdDev;
+}
 Vue.use(vueSmoothScroll);
 
 Vue.use(VueLand);
