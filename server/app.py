@@ -27,7 +27,7 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 class Question(db.Model):
     __tablename__ = 'question'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    question = db.Column(db.String(500), unique=True)
+    question = db.Column(db.String(500), unique=False)
     question_category_id = db.Column(db.Integer, db.ForeignKey('question_category.id'))
     question_subcategory_id = db.Column(db.Integer, db.ForeignKey('question_subcategory.id'))
     question_chapter = db.Column(db.Integer)
