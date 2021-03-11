@@ -75,7 +75,7 @@ export default {
     ...mapState(['userScore']),
     ...mapActions(['setAuthorization']),
     titleText() {
-      return 'Learn with Pely';
+      return 'Learn with me';
     },
     signInText() {
       return 'Sign in';

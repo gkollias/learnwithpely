@@ -15,7 +15,7 @@
             <div class=" o-hidden text-left">
               <div class="">
                 <h4 class="card-title font-weight-bold">
-                  Learn with Pely
+                  Learn with me
                 </h4>
                 <p class="">
                   Είμαστε ένα site με σκοπό τη μάθηση. Έλα να μάθουμε μαζί!
