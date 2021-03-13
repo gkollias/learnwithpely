@@ -35,6 +35,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+import store from '../store';
+
 const FULL_DASH_ARRAY = 283;
 const WARNING_THRESHOLD = 5;
 const ALERT_THRESHOLD = 3;
@@ -74,6 +77,7 @@ export default {
       timerInterval: null,
     };
   },
+  ...mapActions(['setTimeIsUp']),
 
   watch: {
     restartTimer() {
@@ -96,6 +100,8 @@ export default {
   },
   methods: {
     onTimesUp() {
+      store.dispatch('setTimeIsUp', true);
+
       clearInterval(this.timerInterval);
     },
     startTimer() {

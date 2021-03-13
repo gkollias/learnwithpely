@@ -5,8 +5,14 @@
         v-if="speedMatters"
         class="row pt-5"
       >
-        <div class="col-md-12 text-center pt-5">
-          <!-- <b-progress
+        <div class="col-md-12 question-card__timer text-center pt-5">
+          <Countdown
+            :restart-timer="restartTimer"
+            :timer-stopped="timerStopped"
+          />
+        </div>
+        <!-- <div>
+          <b-progress
             :max="max"
             height="2rem"
             show-progress
@@ -19,12 +25,8 @@
                 Time Bonus {{ timerBonus }}
               </h5>
             </b-progress-bar>
-          </b-progress> -->
-          <Countdown
-            :restart-timer="restartTimer"
-            :timer-stopped="timerStopped"
-          />
-        </div>
+          </b-progress>
+        </div> -->
       </div>
     </div>
     <FlipCard
@@ -151,7 +153,7 @@ export default {
   },
   computed: {
     ...mapActions(['setNextQuestion', 'incrementScore']),
-    ...mapState(['questions', 'user']),
+    ...mapState(['questions', 'user', 'timeIsUp']),
     answerImageStyle() {
       if (!this.questionAnswered) {
         return 'question-card__question';
@@ -203,9 +205,33 @@ export default {
   created() {
     this.getQuestion(this.id);
     this.getQuestionAnswered(this.user.id, this.id);
+
+    // this.unwatch = this.$store.watch(
+    //   (state, getters) => getters.status,
+    //   (newValue, oldValue) => {
+    //     // eslint-disable-next-line no-console
+    //     console.log(`Updating from ${oldValue} to ${newValue}`);
+
+    //     // Do whatever makes sense now
+    //     if (newValue === 'success') {
+    //       this.complex = {
+    //         deep: 'some deep object',
+    //       };
+    //     }
+    //   },
+    // );
+
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === 'SET_TIME_IS_UP') {
+        // Do whatever makes sense now
+        if (state.timeIsUp === true) {
+          this.answerClick();
+        }
+      }
+    });
   },
   mounted() {
-    this.startTimer();
+    // this.startTimer();
   },
   methods: {
     getQuestion(id) {
@@ -263,6 +289,7 @@ export default {
     },
     nextQuestion() {
       store.dispatch('setNextQuestion');
+      store.dispatch('setTimeIsUp', false);
       this.questionAnswered = false;
       this.selectedAnswer = '';
       this.restartTimer = !this.restartTimer;
@@ -286,13 +313,13 @@ export default {
           console.error(error);
         });
     },
-    startTimer() {
-      const timerBonus = setInterval(() => {
-        this.value += 5;
-        this.timerBonus -= 5;
-        if (this.value >= 100) clearInterval(timerBonus);
-      }, 150);
-    },
+    // startTimer() {
+    //   const timerBonus = setInterval(() => {
+    //     this.value += 5;
+    //     this.timerBonus -= 5;
+    //     if (this.value >= 100) clearInterval(timerBonus);
+    //   }, 150);
+    // },
   },
 };
 </script>
@@ -313,6 +340,11 @@ export default {
 
 .question-card__score-transition {
   text-align: center;
+}
+
+.question-card__timer {
+  justify-content: center;
+  display: flex;
 }
 
 .animate__animated.animate__bounceOutUp {

@@ -5,6 +5,7 @@ import {
   SHOW_QUESTIONS,
   SET_SCORE,
   INCREMENT_SCORE,
+  SET_TIME_IS_UP,
 } from './mutation-types';
 
 export default {
@@ -33,5 +34,10 @@ export default {
   [INCREMENT_SCORE](state, score) {
     // eslint-disable-next-line no-param-reassign
     state.userScore += score;
+  },
+
+  [SET_TIME_IS_UP](state, timeIsUp) {
+    // eslint-disable-next-line no-param-reassign
+    state.timeIsUp = timeIsUp;
   },
 };

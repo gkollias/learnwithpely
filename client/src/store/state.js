@@ -5,4 +5,5 @@ export default {
   showQuestions: false,
   currentQuestionId: '0',
   userScore: 0,
+  timeIsUp: false,
 };

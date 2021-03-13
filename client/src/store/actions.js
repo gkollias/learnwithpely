@@ -7,6 +7,7 @@ import {
   SHOW_QUESTIONS,
   SET_SCORE,
   INCREMENT_SCORE,
+  SET_TIME_IS_UP,
 } from './mutation-types';
 
 function getNextQuestionId(state) {
@@ -98,5 +99,9 @@ export default {
 
   showQuestions({ commit }, show) {
     commit(SHOW_QUESTIONS, show);
+  },
+
+  setTimeIsUp({ commit }, timeIsUp) {
+    commit(SET_TIME_IS_UP, timeIsUp);
   },
 };
