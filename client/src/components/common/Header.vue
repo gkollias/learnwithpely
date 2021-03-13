@@ -22,7 +22,12 @@
         </div>
       </b-navbar-brand>
       <b-navbar-brand class="mr-auto text-18 text-white">
-        Learn with me
+        <router-link
+          style="color:white"
+          to="/"
+        >
+          Learn with me
+        </router-link>
       </b-navbar-brand>
       <b-navbar-toggle
         target="nav-collapse"
