@@ -10,7 +10,8 @@
         <Question
           v-if="currentQuestionId"
           :id="currentQuestionId"
-          :speed-matters="false"
+          :speed-matters="speedMatters"
+          :is-game="!!gameId"
         />
         <div v-else>
           <QuestionEnd />
@@ -20,7 +21,14 @@
         v-else
         class="d-flex justify-content-around"
       >
-        <QuestionFilteringCard :class-id="classQuestion" />
+        <QuestionFilteringCard
+          v-if="classQuestion"
+          :class-id="classQuestion"
+        />
+        <QuestionGamesCard
+          v-else
+          :game-id="gameId"
+        />
       </div>
     </div>
     <Footer />
@@ -37,6 +45,7 @@ import Intro from './intros/introCut.vue';
 import Question from './Question.vue';
 import QuestionEnd from './QuestionEnd.vue';
 import QuestionFilteringCard from './QuestionFilteringCard.vue';
+import QuestionGamesCard from './QuestionGamesCard.vue';
 import 'animate.css';
 
 export default {
@@ -53,20 +62,18 @@ export default {
     Question,
     QuestionEnd,
     QuestionFilteringCard,
+    QuestionGamesCard,
   },
   data() {
     return {
-      classQuestion: this.$route.params.classQuestion,
+      classQuestion: this.$route.params.classQuestion < 100 ? this.$route.params.classQuestion : 0,
+      gameId: this.$route.params.classQuestion > 100 ? this.$route.params.classQuestion : 0,
+      speedMatters: this.$route.params.classQuestion > 100,
     };
   },
   computed: {
     ...mapState(['showQuestions', 'currentQuestionId']),
     ...mapActions(['initNextQuestion']),
-    // getIconUrl() {
-    //   // eslint-disable-next-line global-require
-    //   const url = require('../assets/images/cloud.svg');
-    //   return url;
-    // },
   },
   created() {
     store.dispatch('initNextQuestion');

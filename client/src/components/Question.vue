@@ -132,6 +132,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    isGame: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -202,9 +206,10 @@ export default {
       this.getQuestionAnswered(this.user.id, this.id);
     },
   },
-  created() {
+  mounted() {
     this.getQuestion(this.id);
-    this.getQuestionAnswered(this.user.id, this.id);
+
+    // this.startTimer();
 
     // this.unwatch = this.$store.watch(
     //   (state, getters) => getters.status,
@@ -228,10 +233,13 @@ export default {
           this.answerClick();
         }
       }
+      if (mutation.type === 'SET_USER') {
+        // Do whatever makes sense now
+        if (state.user.id) {
+          this.getQuestionAnswered(this.user.id, this.id);
+        }
+      }
     });
-  },
-  mounted() {
-    // this.startTimer();
   },
   methods: {
     getQuestion(id) {
