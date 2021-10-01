@@ -32,22 +32,6 @@
           </option>
         </b-form-select>
         <b-form-select
-          id="form-question-subcategory-input"
-          v-model="selectedSubcategoryId"
-          class="mt-2"
-          required
-          placeholder="Enter question subcategory"
-          @change="subcategoryChange"
-        >
-          <option
-            v-for="qc in questionSubcategories"
-            :key="qc.id"
-            :value="qc.id"
-          >
-            {{ qc.name }}
-          </option>
-        </b-form-select>
-        <b-form-select
           id="form-question-chapter-input"
           v-model="selectedChapterId"
           class="mt-2"
@@ -67,7 +51,7 @@
         variant="primary"
         style="display: block"
         class="mx-auto bg-info"
-        :disabled="!selectedCategoryId || !selectedCategoryId || !selectedChapterId "
+        :disabled="!selectedCategoryId || !selectedChapterId "
         @click="getQuestions"
       >
         {{ ctaBtnText }}
@@ -99,10 +83,8 @@ export default {
     return {
       questionType: '',
       questionCategories: {},
-      questionSubcategories: {},
       questionChapters: [],
       selectedCategoryId: 0,
-      selectedSubcategoryId: 0,
       selectedChapterId: 0,
       showNoResults: false,
       imageProps: {
@@ -141,7 +123,6 @@ export default {
       const payload = {
         class_id: this.classId,
         category_id: this.selectedCategoryId,
-        subcategory_id: this.selectedSubcategoryId,
         chapter_id: this.selectedChapterId,
       };
       axios.post(path, payload)
@@ -176,20 +157,8 @@ export default {
           console.error(error);
         });
     },
-    getQuestionSubcategories() {
-      const path = `/api/questionSubcategories/${this.selectedCategoryId}`;
-      axios.get(path)
-        .then((res) => {
-          res.data.question_subcategories.splice(0, 0, { id: 0, name: 'Παρακαλώ επιλέξτε μια υποκατηγορία' });
-          this.questionSubcategories = res.data.question_subcategories;
-        })
-        .catch((error) => {
-          // eslint-disable-next-line
-          console.error(error);
-        });
-    },
     getQuestionChapters() {
-      const path = `/api/questionChapters/${this.selectedCategoryId}/${this.selectedSubcategoryId}`;
+      const path = `/api/questionChapters/${this.selectedCategoryId}`;
       axios.get(path)
         .then((res) => {
           const localQc = [];
@@ -209,11 +178,6 @@ export default {
       return 'Δεν υπάρχουν αποτελέσματα για αυτά τα κριτήρια.';
     },
     categoryChange() {
-      this.getQuestionSubcategories();
-      this.selectedSubcategoryId = 0;
-      this.selectedChapterId = 0;
-    },
-    subcategoryChange() {
       this.getQuestionChapters();
       this.selectedChapterId = 0;
     },

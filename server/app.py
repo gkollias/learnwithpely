@@ -333,6 +333,18 @@ def category_question_subcategories(question_category_id):
     response_object['question_subcategories'] = question_subcategory_schema.dump(QuestionSubcategory.query.filter_by(question_category_id=question_category_id).all(), many= True)
     return jsonify(response_object)
 
+@app.route('/api/questionChapters/<category_id>', methods=['GET'])
+def category_question_chapters(category_id):
+    response_object = {'status': 'success'}
+    chapters = []
+    for q in Question.query.filter_by(question_category_id=category_id).distinct(Question.question_chapter):
+        chapters.append(q.question_chapter)
+
+    response_object['question_chapters'] = chapters
+
+    return jsonify(response_object)
+
+
 @app.route('/api/questionChapters/<category_id>/<subcategory_id>', methods=['GET'])
 def category_subcategory_question_chapters(category_id, subcategory_id):
     response_object = {'status': 'success'}
