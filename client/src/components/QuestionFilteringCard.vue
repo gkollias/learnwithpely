@@ -152,7 +152,7 @@ export default {
             .then(() => {
               if (this.questions.length > 0) {
                 store.dispatch('showQuestions', true);
-                store.dispatch('setNextQuestion');
+                store.dispatch('setNextQuestion', false);
                 this.showNoResults = false;
               } else {
                 this.showNoResults = true;

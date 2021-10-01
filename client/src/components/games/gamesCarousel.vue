@@ -30,34 +30,39 @@
               :slide-by="4"
             >
               <div
-                v-for="(service, key) in services"
+                v-for="(game, key) in games"
                 :key="key"
                 class="service-wrap"
               >
-                <div class="card o-hidden m-3">
-                  <div class="card-header p-0 text-center ">
-                    <img
-                      class="img-responsive"
-                      :src="service.serviceImage"
-                    >
+                <router-link :to="classQuestionUrl('101')">
+                  <div class="card o-hidden m-3">
+                    <div class="card-header p-0 text-center ">
+                      <img
+                        class="img-responsive"
+                        :src="game.gameImage"
+                      >
+                    </div>
+                    <div class="card-body">
+                      <h3 class="card-title text-capitalize font-weight-bold  ">
+                        {{ game.gameName }}
+                      </h3>
+                      <p
+                        class="card-text"
+                        style="color:black"
+                      >
+                        {{ game.gameText }}
+                      </p>
+                    </div>
+                    <div class="card-footer pl-3 d-flex justify-content-center">
+                      <b-button
+                        :href="game.gameLink"
+                        variant="primary"
+                      >
+                        Πάμε
+                      </b-button>
+                    </div>
                   </div>
-                  <div class="card-body">
-                    <h3 class="card-title text-capitalize font-weight-bold  ">
-                      {{ service.serviceName }}
-                    </h3>
-                    <p class="card-text">
-                      {{ service.serviceText }}
-                    </p>
-                  </div>
-                  <div class="card-footer pl-3">
-                    <a
-                      href="#"
-                      class="btn btn-lg p-1 mr-1 text-dark"
-                    >
-                      <span class="eva eva-link-2-outline" />
-                    </a>
-                  </div>
-                </div>
+                </router-link>
               </div>
             </carousel>
           </div>
@@ -75,21 +80,27 @@ export default {
   components: { carousel },
   data() {
     return {
-      services: [
+      games: [
         {
-          serviceImage: calculator,
-          serviceName: 'Προπαίδεια',
-          serviceText:
+          gameImage: calculator,
+          gameName: 'Προπαίδεια',
+          gameText:
             '2 επί 2 = 5. Ή μήπως όχι?',
+          gameLink: this.classQuestionUrl('101'),
         },
         // {
-        //   serviceImage: calculator,
-        //   serviceName: 'Service Eight',
-        //   serviceText:
+        //   gameImage: calculator,
+        //   gameName: 'game Eight',
+        //   gameText:
         //     'Lorem ipsum dolor sit amet additional adipiscing elit Aenean commodo ligula',
         // },
       ],
     };
+  },
+  methods: {
+    classQuestionUrl(classname) {
+      return `/classQuestion/${classname}`;
+    },
   },
 };
 </script>

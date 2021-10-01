@@ -10,10 +10,30 @@ import {
   SET_TIME_IS_UP,
 } from './mutation-types';
 
-function getNextQuestionId(state) {
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
+const gameQuestions = [];
+let totalGameQuestions = 0;
+const gameMaxQuestions = 10;
+
+function getNextQuestionId(state, isGame) {
   const id = parseInt(state.currentQuestionId, 10);
   // eslint-disable-next-line no-console
   // console.log(id);
+
+  if (isGame) {
+    if (totalGameQuestions > gameMaxQuestions || totalGameQuestions === state.questions.length) {
+      return 0;
+    }
+    let random = 0;
+    while (gameQuestions.includes(random)) {
+      random = getRandomInt(state.questions.length);
+    }
+    gameQuestions.push(random);
+    totalGameQuestions += 1;
+    return state.questions[random].id;
+  }
   if (id === 0 && state.questions.length > 0) {
     return state.questions[0].id;
   }
@@ -78,8 +98,8 @@ export default {
     commit(SET_QUESTIONS, questions);
   },
 
-  setNextQuestion({ state, commit }) {
-    commit(SET_NEXT_QUESTION, getNextQuestionId(state));
+  setNextQuestion({ state, commit }, isGame) {
+    commit(SET_NEXT_QUESTION, getNextQuestionId(state, isGame));
   },
 
   setScore({ commit }, score) {

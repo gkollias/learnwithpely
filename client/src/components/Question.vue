@@ -296,7 +296,7 @@ export default {
       }
     },
     nextQuestion() {
-      store.dispatch('setNextQuestion');
+      store.dispatch('setNextQuestion', this.isGame);
       store.dispatch('setTimeIsUp', false);
       this.questionAnswered = false;
       this.selectedAnswer = '';
