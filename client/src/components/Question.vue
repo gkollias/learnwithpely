@@ -191,7 +191,7 @@ export default {
       return 'Κρίμα, αυτό δεν είναι σωστό. Η σωστή απάντηση είναι: ';
     },
     getQuestionLabel() {
-      return 'Παρακαλώ επέλεξε τη σωστή απάντηση:';
+      return 'Παρακαλώ διάλεξε τη σωστή απάντηση:';
     },
     answerButtonText() {
       return 'OK';
