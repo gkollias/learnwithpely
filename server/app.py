@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from datetime import datetime
 from itertools import chain
-from icecream import ic
+# from icecream import ic
 
 # configuration
 DEBUG = True
