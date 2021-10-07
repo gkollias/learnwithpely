@@ -97,7 +97,7 @@
                 type="submit"
                 class="btn btn-block half-button form-submit-button btn-large btn-gradient"
               >
-                Αποστολή μυνήματος
+                Αποστολή μηνύματος
               </button>
             </div>
           </form>
