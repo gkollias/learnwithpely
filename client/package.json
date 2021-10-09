@@ -33,7 +33,7 @@
     "lodash": "^4.17.21",
     "lottie-player-vue": "^0.0.16",
     "strip-ansi": "^6.0.0",
-    "sweetalert2": "^9.10.12",
+    "sweetalert2": "^9.17.2",
     "vue": "^2.6.12",
     "vue-authenticate": "^1.4.1",
     "vue-axios": "^2.1.5",
