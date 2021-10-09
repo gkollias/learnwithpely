@@ -112,6 +112,7 @@
 import axios from 'axios';
 import { mapActions, mapState } from 'vuex';
 import _ from 'lodash';
+import Swal from 'sweetalert2';
 import '@lottiefiles/lottie-player';
 import floating from 'floating.js';
 import FlipCard from './FlipCard.vue';
@@ -142,6 +143,7 @@ export default {
       question: {},
       selectedAnswer: '',
       questionAnswered: false,
+      currentLevel: 0,
       imageProps: {
         width: 75,
         height: 75,
@@ -157,7 +159,7 @@ export default {
   },
   computed: {
     ...mapActions(['setNextQuestion', 'incrementScore']),
-    ...mapState(['questions', 'user', 'timeIsUp']),
+    ...mapState(['questions', 'user', 'timeIsUp', 'userScore']),
     answerImageStyle() {
       if (!this.questionAnswered) {
         return 'question-card__question';
@@ -199,6 +201,21 @@ export default {
     nextButtonText() {
       return 'Επόμενη ερώτηση';
     },
+    calculateLevel() {
+      return Math.floor(this.userScore / 100);
+    },
+    getLevelCongratsText() {
+      let text = 'Ανέβηκες επίπεδο! Συγχαρητήρια!';
+      if (this.currentLevel === 1) {
+        text = 'Wow👏🏻✅ μόλις πέρασες την πρώτη πίστα👍🏻';
+      } else if (this.currentLevel === 2) {
+        text = ' Υπέροχα!! Έφτασες κιόλας στη δεύτερη πίστα 💪🏻! Συνέχισε έτσι👩🏼‍🏫';
+      } else if (this.currentLevel === 3) {
+        text = 'Γιούπι 🎊!! Είσαι στην πίστα 3📍';
+      }
+
+      return text;
+    },
   },
   watch: {
     id() {
@@ -208,7 +225,7 @@ export default {
   },
   mounted() {
     this.getQuestion(this.id);
-
+    this.currentLevel = this.calculateLevel;
     // this.startTimer();
 
     // this.unwatch = this.$store.watch(
@@ -291,6 +308,7 @@ export default {
           });
         }
         this.storeAnsweredQuestion(true);
+        this.checkLevelChange();
       } else {
         this.storeAnsweredQuestion(false);
       }
@@ -320,6 +338,21 @@ export default {
           // eslint-disable-next-line
           console.error(error);
         });
+    },
+    displayLevelChangeAlert() {
+      Swal.fire({
+        icon: 'success',
+        title: this.getLevelCongratsText,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    },
+    checkLevelChange() {
+      const level = this.calculateLevel;
+      if (level > this.currentLevel) {
+        this.currentLevel = level;
+        this.displayLevelChangeAlert();
+      }
     },
     // startTimer() {
     //   const timerBonus = setInterval(() => {
