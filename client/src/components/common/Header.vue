@@ -78,7 +78,20 @@
               <animated-number
                 :value="userScore"
                 :format-value="formatToPrice"
-                :duration="300"
+                :duration="1000"
+              />
+            </a>
+          </li>
+          <li
+            v-if="!$auth.loading && $auth.isAuthenticated"
+            class="nav-item pl-3"
+          >
+            <a class="level">
+              {{ levelText }}
+              <animated-number
+                :value="level"
+                :format-value="formatToLevel"
+                :duration="1000"
               />
             </a>
           </li>
@@ -88,7 +101,6 @@
           >
             <a
               id=""
-              name=""
               class="btn half-button btn-outline-white btn-sm pl-3 pr-3
               mr-1 text-uppercase"
               href="#"
@@ -104,7 +116,6 @@
           >
             <a
               id=""
-              name=""
               class="btn half-button btn-warning btn-sm pl-3 pr-3 mr-1 text-uppercase"
               href="#"
               role="button"
@@ -229,6 +240,12 @@ export default {
     scoreText() {
       return 'Score:';
     },
+    levelText() {
+      return 'Επίπεδο:';
+    },
+    level() {
+      return Math.floor(this.userScore / 100);
+    },
   },
   created() {
     window.addEventListener('scroll', this.handleScroll);
@@ -267,6 +284,9 @@ export default {
     },
     formatToPrice(value) {
       return `${Number(value).toFixed(2)}`;
+    },
+    formatToLevel(value) {
+      return `${Number(value).toFixed(0)}`;
     },
   },
 };

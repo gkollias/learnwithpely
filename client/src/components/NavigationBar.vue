@@ -25,7 +25,7 @@
         v-if="$auth.isAuthenticated"
         align="left"
       >
-        {{ scoreText }} {{ userScore }}
+        {{ scoreText }} {{ userScore }} {{ levelText }} {{ level }}
       </b-nav-text>
       <b-nav-item-dropdown
         v-if="$auth.isAuthenticated"
@@ -82,6 +82,12 @@ export default {
     },
     scoreText() {
       return 'Score:';
+    },
+    levelText() {
+      return 'Επίπεδο:';
+    },
+    level() {
+      return Math.floor(this.userScore / 100);
     },
   },
   methods: {
