@@ -202,7 +202,7 @@ export default {
       return 'Επόμενη ερώτηση';
     },
     calculateLevel() {
-      return Math.floor(this.userScore / 100);
+      return Math.floor(this.userScore / 1000);
     },
     getLevelCongratsText() {
       let text = 'Ανέβηκες επίπεδο! Συγχαρητήρια!';

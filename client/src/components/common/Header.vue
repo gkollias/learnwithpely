@@ -244,7 +244,7 @@ export default {
       return 'Επίπεδο:';
     },
     level() {
-      return Math.floor(this.userScore / 100);
+      return Math.floor(this.userScore / 1000);
     },
   },
   created() {
