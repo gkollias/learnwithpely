@@ -15,19 +15,12 @@
             to="/"
           >
             <img
-              src="@/assets/images/logos/emoji_me.png"
+              class="owl-logo"
+              src="@/assets/images/logos/learn-with-me-logo-owl.png"
               alt=""
             >
           </router-link>
         </div>
-      </b-navbar-brand>
-      <b-navbar-brand class="mr-auto text-18 text-white">
-        <router-link
-          style="color:white"
-          to="/"
-        >
-          Learn with me
-        </router-link>
       </b-navbar-brand>
       <b-navbar-toggle
         target="nav-collapse"
@@ -295,5 +288,10 @@ export default {
 <style>
 li>a:after {
     content: "";
+}
+
+.owl-logo {
+  width: 100px!important;
+  height: 56px!important;
 }
 </style>
