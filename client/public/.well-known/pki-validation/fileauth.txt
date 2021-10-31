@@ -1,1 +1,5 @@
+www.learn-with-me.eu/.well-known/pki-validation/fileauth.txt
+
+Random Value
+
 gxzfbn0s1j27szqkc4cdjmlq82cwcnv8
