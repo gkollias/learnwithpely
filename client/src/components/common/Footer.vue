@@ -86,52 +86,29 @@
             class="mb-lg-0 mb-md-0"
           >
             <div class=" o-hidden text-left">
-              <div class="">
+              <div
+                class=""
+                style="height: 200px;"
+              >
                 <h4 class="card-title font-weight-bold">
                   Στοιχεία επικοινωνίας
                 </h4>
-                <div class="address-wrap mb-3">
-                  <ul class="list-group list-unstyled">
-                    <li class="">
-                      <i class="eva eva-pin-outline mr-2" />Αθήνα, Ελλάδα
-                    </li>
-                  </ul>
+                <div class="social-icons">
+                  <a
+                    href="https://www.instagram.com/learnwithme.eu/"
+                    class="social-icon social-icon--instagram"
+                  >
+                    <i class="fa fa-instagram" />
+                    <div class="tooltip">Follow us!</div>
+                  </a>
+                  <a
+                    href=""
+                    class="social-icon social-icon--facebook"
+                  >
+                    <i class="fa fa-facebook" />
+                    <div class="tooltip">Like us!</div>
+                  </a>
                 </div>
-                <div class="address-wrap mb-3">
-                  <ul class="list-group list-unstyled">
-                    <li class="">
-                      <i class="eva eva-email-outline mr-2" />pelagiakorre@gmail.com
-                    </li>
-                  </ul>
-                </div>
-
-                <!-- <div class="address-wrap mb-3">
-                  <ul class="list-group list-unstyled">
-                    <li class="">
-                      <i class="eva eva-phone-call-outline mr-2" />
-                      +8801961081993
-                    </li>
-                  </ul>
-                </div> -->
-
-                <section class="social-wrap ">
-                  <div class="social-btns-wrap">
-                    <a
-                      class="social-btn text-30 facebook ml-0"
-                      href="#"
-                    ><i class="eva eva-facebook" /></a>
-
-                    <a
-                      class="social-btn text-30 twitter"
-                      href="#"
-                    ><i class="eva eva-twitter" /></a>
-
-                    <a
-                      class="social-btn text-30 google"
-                      href="#"
-                    ><i class="eva eva-google" /></a>
-                  </div>
-                </section>
               </div>
             </div>
           </b-col>
@@ -141,3 +118,93 @@
     </section>
   </div>
 </template>
+
+<style>
+.social-icons{
+    display: flex;
+    position: relative;
+    top: 38%;
+}
+.social-icon{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 0.5rem;
+    border-radius: 50%;
+    cursor: pointer;
+    font-family: "Halvetica Neue",sans-serif,"Arial";
+    font-size: 2.5rem;
+    text-decoration: none;
+    transition: all 0.15s ease;
+    box-shadow: inset 1px 1px 2px #90a4ae,
+                inset -1px -1px 2px white,
+                5px 5px 10px #90a4ae,
+                -5px -5px 10px white;
+    border: 6px solid rgba(230,228,228);
+}
+/* Tooltips */
+.tooltip {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    text-transform: uppercase;
+    transform: translate(-50%, -100%);
+    transition: all 0.3s ease;
+    z-index: 1;
+  }
+  .tooltip:after {
+    display: block;
+    position: absolute;
+    bottom: 1px;
+    left: 50%;
+    width: 0;
+    height: 0;
+    content: "";
+    border: solid;
+    border-width: 10px 10px 0 10px;
+    border-color: transparent;
+    transform: translate(-50%, 100%);
+  }
+
+/* color */
+.social-icon--instagram{
+    background: #527fa6;
+    color: white;
+}
+.social-icon--facebook{
+    background: #3b5a9b;
+    color: white;
+}
+/* Hover Effect*/
+.social-icon:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, -150%);
+}
+
+.social-icon--facebook .tooltip{
+    background: #3b5a9b;
+    columns: currentColor;
+}
+.social-icon--facebook .tooltip::after{
+    border-top-color: #3b5a9a;
+}
+
+.social-icon--instagram .tooltip{
+    background: #527fa6;
+    columns: currentColor;
+}
+.social-icon--instagram .tooltip:after{
+    border-top-color: #527fa6;
+}
+</style>
