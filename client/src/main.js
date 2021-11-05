@@ -46,3 +46,9 @@ new Vue({
   router,
   render: (h) => h(App),
 }).$mount('#app');
+
+// eslint-disable-next-line no-restricted-globals
+if (location.protocol !== 'https:' && location.href.indexOf('localhost') === -1) {
+  // eslint-disable-next-line no-restricted-globals
+  location.replace(`https:${location.href.substring(location.protocol.length)}`);
+}
