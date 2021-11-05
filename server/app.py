@@ -1,7 +1,7 @@
 import uuid
 import os
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, redirect
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -62,7 +62,6 @@ class QuestionSchema(ma.ModelSchema):
     class Meta:
         model = Question
         include_fk = True
-
 
 class QuestionCategory(db.Model):
     __tablename__ = 'question_category'
@@ -160,7 +159,6 @@ class UserScoreSchema(ma.ModelSchema):
     class Meta:
         model = UserScore
 
-
 class UserQuestionAnswered(db.Model):
     __tablename__ = 'user_question_answered'
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
@@ -191,6 +189,17 @@ class UserQuestionAnsweredSchema(ma.ModelSchema):
     class Meta:
         model = UserQuestionAnswered
 
+
+@app.before_request
+def before_request_func():
+    if app.env == "development":
+        return
+    if request.is_secure:
+        return
+
+    url = request.url.replace("http://", "https://", 1)
+    code = 301
+    return redirect(url, code=code)
 
 @app.route('/api/questions', methods=['GET', 'POST'])
 def all_questions():
