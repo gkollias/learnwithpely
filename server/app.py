@@ -190,16 +190,17 @@ class UserQuestionAnsweredSchema(ma.ModelSchema):
         model = UserQuestionAnswered
 
 
-@app.before_request
-def before_request_func():
-    if app.env == "development":
-        return
-    if request.is_secure:
-        return
+# @app.before_request
+# def before_request_func():
+#     print("test"+str(app.env))
+#     if app.env == "development":
+#         return
+#     if request.is_secure:
+#         return
 
-    url = request.url.replace("http://", "https://", 1)
-    code = 301
-    return redirect(url, code=code)
+#     url = request.url.replace("http://", "https://", 1)
+#     code = 301
+#     return redirect(url, code=code)
 
 @app.route('/api/questions', methods=['GET', 'POST'])
 def all_questions():
@@ -374,6 +375,19 @@ def all_question_classes():
     question_class_schema = QuestionClassSchema()
     response_object['question_classes'] = question_class_schema.dump(QuestionClass.query.all(), many= True)
     return jsonify(response_object)
+
+@app.route('/api/questionGames', methods=['GET'])
+def all_question_games():
+    response_object = {'status': 'success'}
+    # question_game_schema = QuestionGameSchema()
+    # response_object['question_games'] = question_game_schema.dump(QuestionGame.query.all(), many= True)
+    # return jsonify(response_object)
+    return jsonify({'question_games': [{
+            'id':"101",
+            'name' : "Παιχνίδι πολλαπλασιασμού"
+        }]
+    })
+
 
 @app.route('/auth/login', methods=['POST'])
 def login():

@@ -8,22 +8,27 @@ import {
   SET_SCORE,
   INCREMENT_SCORE,
   SET_TIME_IS_UP,
+  SET_SELECTED_CLASS_ID,
+  SET_SELECTED_CATEGORY_ID,
+  SET_SELECTED_SUBCATEGORY_ID,
+  SET_SELECTED_CHAPTER_ID,
+  SET_SELECTED_GAME_ID,
 } from './mutation-types';
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
-const gameQuestions = [];
+let gameQuestions = [];
 let totalGameQuestions = 0;
 const gameMaxQuestions = 10;
 
 function getNextQuestionId(state, isGame) {
   const id = parseInt(state.currentQuestionId, 10);
-  // eslint-disable-next-line no-console
-  // console.log(id);
 
   if (isGame) {
     if (totalGameQuestions > gameMaxQuestions || totalGameQuestions === state.questions.length) {
+      gameQuestions = [];
+      totalGameQuestions = 0;
       return 0;
     }
     let random = 0;
@@ -32,16 +37,21 @@ function getNextQuestionId(state, isGame) {
     }
     gameQuestions.push(random);
     totalGameQuestions += 1;
+
     return state.questions[random].id;
   }
+
   if (id === 0 && state.questions.length > 0) {
     return state.questions[0].id;
   }
+
   for (let i = 0; i < state.questions.length - 1; i += 1) {
     if (state.questions[i].id === id) {
       return state.questions[i + 1].id;
     }
   }
+
+  gameQuestions = [];
   return 0;
 }
 
@@ -123,5 +133,25 @@ export default {
 
   setTimeIsUp({ commit }, timeIsUp) {
     commit(SET_TIME_IS_UP, timeIsUp);
+  },
+
+  setSelectedClassId({ commit }, selectedClassId) {
+    commit(SET_SELECTED_CLASS_ID, selectedClassId);
+  },
+
+  setSelectedCategoryId({ commit }, selectedCategoryId) {
+    commit(SET_SELECTED_CATEGORY_ID, selectedCategoryId);
+  },
+
+  setSelectedSubcategoryId({ commit }, selectedSubcategoryId) {
+    commit(SET_SELECTED_SUBCATEGORY_ID, selectedSubcategoryId);
+  },
+
+  setSelectedChapterId({ commit }, selectedChapterId) {
+    commit(SET_SELECTED_CHAPTER_ID, selectedChapterId);
+  },
+
+  setSelectedGameId({ commit }, selectedGameId) {
+    commit(SET_SELECTED_GAME_ID, selectedGameId);
   },
 };

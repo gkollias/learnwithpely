@@ -271,6 +271,9 @@ export default {
         });
     },
     getQuestionAnswered(userId, questionId) {
+      if (!userId) {
+        return;
+      }
       const path = `/api/user/questions/answered/${userId}/${questionId}`;
       axios.get(path)
         .then((res) => {

@@ -109,14 +109,16 @@ export default {
         // eslint-disable-next-line no-multi-assign
         this.timePassed = this.timePassed += 1;
         this.timeLeft = TIME_LIMIT - this.timePassed;
-        document.getElementById('base-timer-label').innerHTML = this.formatTime(
-          this.timeLeft,
-        );
-        this.setCircleDasharray();
-        this.setRemainingPathColor(this.timeLeft);
+        if (document.getElementById('base-timer-label')) {
+          document.getElementById('base-timer-label').innerHTML = this.formatTime(
+            this.timeLeft,
+          );
+          this.setCircleDasharray();
+          this.setRemainingPathColor(this.timeLeft);
 
-        if (this.timeLeft === 0 || this.timerStopped) {
-          this.onTimesUp();
+          if (this.timeLeft === 0 || this.timerStopped) {
+            this.onTimesUp();
+          }
         }
       }, 1000);
     },
@@ -170,16 +172,18 @@ export default {
       this.timerInterval = null;
       const { alert, info } = COLOR_CODES;
 
-      document.getElementById('base-timer-label').innerHTML = this.formatTime(
-        this.timeLeft,
-      );
-      document
-        .getElementById('base-timer-path-remaining')
-        .classList.remove(alert.color);
-      document
-        .getElementById('base-timer-path-remaining')
-        .classList.add(info.color);
-      this.startTimer();
+      if (document.getElementById('base-timer-label')) {
+        document.getElementById('base-timer-label').innerHTML = this.formatTime(
+          this.timeLeft,
+        );
+        document
+          .getElementById('base-timer-path-remaining')
+          .classList.remove(alert.color);
+        document
+          .getElementById('base-timer-path-remaining')
+          .classList.add(info.color);
+        this.startTimer();
+      }
     },
   },
 };
