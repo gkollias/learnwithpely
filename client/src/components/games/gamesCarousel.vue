@@ -85,7 +85,7 @@ export default {
           gameImage: calculator,
           gameName: 'Προπαίδεια',
           gameText:
-            '2 επί 2 = 5. Ή μήπως όχι?',
+            '2X2 = 5. Ή μήπως όχι?',
           gameLink: this.classQuestionUrl('101'),
         },
         // {
