@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import { authenticationGuard } from './auth/authenticationGuard';
 import QuestionManagement from './components/QuestionManagement.vue';
 import ClassQuestion from './components/ClassQuestion.vue';
 import Home from './components/Home.vue';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -24,6 +25,9 @@ export default new Router({
       path: '/classQuestion/:classQuestion',
       name: 'classQuestion',
       component: ClassQuestion,
+      beforeEnter: authenticationGuard,
     },
   ],
 });
+
+export default router;

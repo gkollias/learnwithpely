@@ -41,6 +41,7 @@ export const useAuth0 = ({
     async created() {
       // Create a new instance of the SDK client using members of the given options object
       this.auth0Client = await createAuth0Client({
+        ...options,
         domain: options.domain,
         client_id: options.clientId,
         audience: options.audience,
