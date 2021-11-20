@@ -3,11 +3,7 @@ import { getInstance } from './index';
 // eslint-disable-next-line import/prefer-default-export
 export const authenticationGuard = (to, from, next) => {
   const authService = getInstance();
-  // eslint-disable-next-line no-console
-  console.log('test');
   const guardAction = () => {
-    // eslint-disable-next-line no-console
-    console.log('Here:');
     if (authService.isAuthenticated) {
       return next();
     }
@@ -21,10 +17,6 @@ export const authenticationGuard = (to, from, next) => {
   }
 
   return authService.$watch('loading', (loading) => {
-    // eslint-disable-next-line no-console
-    console.log('Loading:', loading);
-    // eslint-disable-next-line no-console
-    console.log('Here2:');
     if (loading === false) {
       return guardAction();
     }
