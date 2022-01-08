@@ -10,6 +10,21 @@ from itertools import chain
 from flask_talisman import Talisman
 # from icecream import ic
 
+#add sentry
+import sentry_sdk
+from flask import Flask
+from sentry_sdk.integrations.flask import FlaskIntegration
+
+sentry_sdk.init(
+    dsn="https://e85943a9bd274f388571331c25e4ab99@o1110639.ingest.sentry.io/6139785",
+    integrations=[FlaskIntegration()],
+
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0
+)
+
 # configuration
 DEBUG = True
 
@@ -41,8 +56,9 @@ class Question(db.Model):
     created_date = db.Column(db.DateTime)
     updated_by = db.Column(db.String(200))
     updated_date = db.Column(db.DateTime)
+    question_type_id = db.Column(db.Integer, db.ForeignKey('question_type.id'))
 
-    def __init__(self, question, question_category_id, question_subcategory_id, question_chapter, question_class_id, answer, image_url, created_by, created_date, updated_by, updated_date):
+    def __init__(self, question, question_category_id, question_subcategory_id, question_chapter, question_class_id, answer, image_url, created_by, created_date, updated_by, updated_date, question_type_id):
         self.question = question
         self.question_category_id = question_category_id
         self.question_subcategory_id = question_subcategory_id
@@ -54,6 +70,7 @@ class Question(db.Model):
         self.created_date = created_date
         self.updated_by = updated_by
         self.updated_date = updated_date
+        self.question_type_id = question_type_id
 
     def __repr__(self):
         return '<Question %r>' % self.question
@@ -189,6 +206,22 @@ class UserQuestionAnsweredSchema(ma.ModelSchema):
     class Meta:
         model = UserQuestionAnswered
 
+class QuestionType(db.Model):
+    __tablename__ = 'question_type'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), unique=True)
+    children = db.relationship("Question")
+
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return '<Name %r>' % self.name
+
+class QuestionTypeSchema(ma.ModelSchema):
+    class Meta:
+        model = QuestionType
+
 
 # @app.before_request
 # def before_request_func():
@@ -210,7 +243,7 @@ def all_questions():
         question = Question(post_data.get('question'), post_data.get('question_category_id'), post_data.get('question_subcategory_id'),\
                             post_data.get('question_chapter'), post_data.get('question_class_id'), post_data.get('answer'), \
                             post_data.get('image_url'), post_data.get('created_by'), post_data.get('created_date'), post_data.get('updated_by'), \
-                            post_data.get('updated_date'))
+                            post_data.get('updated_date'), post_data.get('question_type_id'))
         db.session.add(question)
         db.session.commit()
         response_object['message'] = 'Question added!'
@@ -241,6 +274,7 @@ def single_question(question_id):
         question.image_url = post_data.get('image_url')
         question.updated_by = post_data.get('updated_by')
         question.updated_date = post_data.get('updated_date')
+        question.question_type_id = post_data.get('question_type_id')
 
         db.session.commit()
         response_object['message'] = 'Question updated!'
@@ -288,12 +322,14 @@ def questions_by_class(class_id):
 
 @app.route('/api/questions/filter', methods=['POST'])
 def questions_filter():
+    questions = None
     response_object = {'status': 'success'}
     post_data = request.get_json()
     class_id = post_data.get('class_id')
     category_id = post_data.get('category_id')
     subcategory_id = post_data.get('subcategory_id')
     chapter_id = post_data.get('chapter_id')
+    type_id = post_data.get('type_id')
     if class_id != None:
         questions = set(Question.query.filter_by(question_class_id=class_id).all())
     if category_id != None:
@@ -315,6 +351,13 @@ def questions_filter():
             questions = questions.intersection(q_chapter)
         else:
             questions = q_chapter
+
+    if type_id != None:
+        q_type = set(Question.query.filter_by(question_type_id=type_id).all())
+        if questions != None:
+            questions = questions.intersection(q_type)
+        else:
+            questions = q_type
 
     if questions == None:
         response_object['message'] = 'class,category,subcategory does not exist!'
@@ -357,7 +400,6 @@ def category_question_chapters(category_id):
 
     return jsonify(response_object)
 
-
 @app.route('/api/questionChapters/<category_id>/<subcategory_id>', methods=['GET'])
 def category_subcategory_question_chapters(category_id, subcategory_id):
     response_object = {'status': 'success'}
@@ -375,6 +417,14 @@ def all_question_classes():
     question_class_schema = QuestionClassSchema()
     response_object['question_classes'] = question_class_schema.dump(QuestionClass.query.all(), many= True)
     return jsonify(response_object)
+
+@app.route('/api/questionTypes', methods=['GET'])
+def all_question_types():
+    response_object = {'status': 'success'}
+    question_type_schema = QuestionTypeSchema()
+    response_object['question_types'] = question_type_schema.dump(QuestionType.query.all(), many= True)
+    return jsonify(response_object)
+
 
 @app.route('/api/questionGames', methods=['GET'])
 def all_question_games():

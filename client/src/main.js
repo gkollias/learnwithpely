@@ -5,6 +5,8 @@ import Vue from 'vue';
 
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import vueSmoothScroll from 'vue2-smooth-scroll';
+import * as Sentry from '@sentry/vue';
+import { Integrations } from '@sentry/tracing';
 import store from './store';
 import App from './App.vue';
 import router from './router';
@@ -40,6 +42,21 @@ Vue.use(Auth0Plugin, {
 });
 
 Vue.config.productionTip = false;
+
+Sentry.init({
+  Vue,
+  dsn: 'https://e85943a9bd274f388571331c25e4ab99@o1110639.ingest.sentry.io/6139785',
+  integrations: [
+    new Integrations.BrowserTracing({
+      routingInstrumentation: Sentry.vueRouterInstrumentation(router),
+      tracingOrigins: ['localhost', 'my-site-url.com', /^\//],
+    }),
+  ],
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 new Vue({
   store,
