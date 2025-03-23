@@ -33,8 +33,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///learn_with_pely.db')
 Talisman(app)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -75,10 +74,11 @@ class Question(db.Model):
     def __repr__(self):
         return '<Question %r>' % self.question
 
-class QuestionSchema(ma.ModelSchema):
+class QuestionSchema(ma.SQLAlchemySchema):
     class Meta:
         model = Question
         include_fk = True
+
 
 class QuestionCategory(db.Model):
     __tablename__ = 'question_category'
@@ -92,7 +92,7 @@ class QuestionCategory(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
-class QuestionCategorySchema(ma.ModelSchema):
+class QuestionCategorySchema(ma.SQLAlchemySchema):
     class Meta:
         model = QuestionCategory
 
@@ -110,7 +110,7 @@ class QuestionSubcategory(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
-class QuestionSubcategorySchema(ma.ModelSchema):
+class QuestionSubcategorySchema(ma.SQLAlchemySchema):
     class Meta:
         model = QuestionSubcategory
 
@@ -126,7 +126,7 @@ class QuestionClass(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
-class QuestionClassSchema(ma.ModelSchema):
+class QuestionClassSchema(ma.SQLAlchemySchema):
     class Meta:
         model = QuestionClass
 
@@ -151,7 +151,7 @@ class User(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
-class UserSchema(ma.ModelSchema):
+class UserSchema(ma.SQLAlchemySchema):
     class Meta:
         model = User
 
@@ -172,7 +172,7 @@ class UserScore(db.Model):
     def __repr__(self):
         return '<user_id %r>' % self.user_id
 
-class UserScoreSchema(ma.ModelSchema):
+class UserScoreSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserScore
 
@@ -202,7 +202,7 @@ class UserQuestionAnswered(db.Model):
     def __repr__(self):
         return '<user_id %r>' % self.user_id
 
-class UserQuestionAnsweredSchema(ma.ModelSchema):
+class UserQuestionAnsweredSchema(ma.SQLAlchemySchema):
     class Meta:
         model = UserQuestionAnswered
 
@@ -218,7 +218,7 @@ class QuestionType(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
-class QuestionTypeSchema(ma.ModelSchema):
+class QuestionTypeSchema(ma.SQLAlchemySchema):
     class Meta:
         model = QuestionType
 

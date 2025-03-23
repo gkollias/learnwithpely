@@ -119,7 +119,7 @@ export default {
       return this.questions[0] ? this.questions[0].question : 'empty';
     },
     getQuestions() {
-      const path = '/api/questions/filter';
+      const path = process.env.VUE_APP_API_URL + '/api/questions/filter';
       const payload = {
         class_id: this.classId,
         category_id: this.selectedCategoryId,
@@ -146,7 +146,7 @@ export default {
         });
     },
     getQuestionCategories() {
-      const path = '/api/questionCategories';
+      const path = process.env.VUE_APP_API_URL + '/api/questionCategories';
       axios.get(path)
         .then((res) => {
           res.data.question_categories.splice(0, 0, { id: 0, name: 'Παρακαλώ επιλέξτε μια κατηγορία' });
@@ -158,7 +158,7 @@ export default {
         });
     },
     getQuestionChapters() {
-      const path = `/api/questionChapters/${this.selectedCategoryId}`;
+      const path = process.env.VUE_APP_API_URL + `/api/questionChapters/${this.selectedCategoryId}`;
       axios.get(path)
         .then((res) => {
           const localQc = [];

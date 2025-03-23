@@ -544,7 +544,7 @@ export default {
   },
   methods: {
     getQuestions() {
-      const path = '/api/questions';
+      const path = process.env.VUE_APP_API_URL + '/api/questions';
       axios.get(path)
         .then((res) => {
           this.questions = res.data.questions;
@@ -555,7 +555,7 @@ export default {
         });
     },
     getQuestionCategories() {
-      const path = '/api/questionCategories';
+      const path = process.env.VUE_APP_API_URL + '/api/questionCategories';
       axios.get(path)
         .then((res) => {
           this.questionCategories = res.data.question_categories;
@@ -566,7 +566,7 @@ export default {
         });
     },
     getQuestionSubcategories() {
-      const path = '/api/questionSubcategories';
+      const path = process.env.VUE_APP_API_URL + '/api/questionSubcategories';
       axios.get(path)
         .then((res) => {
           this.questionSubcategories = res.data.question_subcategories;
@@ -577,7 +577,7 @@ export default {
         });
     },
     getQuestionClasses() {
-      const path = '/api/questionClasses';
+      const path = process.env.VUE_APP_API_URL + '/api/questionClasses';
       axios.get(path)
         .then((res) => {
           this.questionClasses = res.data.question_classes;
@@ -610,7 +610,7 @@ export default {
       return !!ans;
     },
     addQuestion(payload) {
-      const path = '/api/questions';
+      const path = process.env.VUE_APP_API_URL + '/api/questions';
       axios.post(path, payload)
         .then(() => {
           this.getQuestions();
@@ -730,7 +730,7 @@ export default {
       this.initForm();
     },
     updateQuestion(payload, questionID) {
-      const path = `/api/questions/${questionID}`;
+      const path = process.env.VUE_APP_API_URL + `/api/questions/${questionID}`;
       axios.put(path, payload)
         .then(() => {
           this.getQuestions();
@@ -750,7 +750,7 @@ export default {
       this.getQuestions(); // why?
     },
     removeQuestion(questionID) {
-      const path = `/api/questions/${questionID}`;
+      const path = process.env.VUE_APP_API_URL + `/api/questions/${questionID}`;
       axios.delete(path)
         .then(() => {
           this.getQuestions();
@@ -784,7 +784,7 @@ export default {
       });
     },
     checkAuthorization(userID) {
-      const path = '/api/managementAuthorization';
+      const path = process.env.VUE_APP_API_URL + '/api/managementAuthorization';
       const payload = {
         user_id: userID,
       };

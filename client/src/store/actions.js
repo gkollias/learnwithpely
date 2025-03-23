@@ -67,7 +67,7 @@ function getUserInfo(commit, user) {
     email: user.email,
     name: user.name,
   };
-  const path = '/api/user/info';
+  const path = process.env.VUE_APP_API_URL + '/api/user/info';
   axios
     .post(path, payload)
     .then((res) => {
@@ -85,7 +85,7 @@ function incrementUserScore(userId, increment) {
     user_id: userId,
     score_increment: increment,
   };
-  const path = '/api/user/score/increment';
+  const path = process.env.VUE_APP_API_URL + '/api/user/score/increment';
   axios
     .put(path, payload)
     .then(() => {})

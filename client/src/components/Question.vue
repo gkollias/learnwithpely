@@ -260,7 +260,7 @@ export default {
   },
   methods: {
     getQuestion(id) {
-      const path = `/api/questions/${id}`;
+      const path = process.env.VUE_APP_API_URL + `/api/questions/${id}`;
       axios.get(path)
         .then((res) => {
           this.question = res.data.questions;
@@ -274,7 +274,7 @@ export default {
       if (!userId) {
         return;
       }
-      const path = `/api/user/questions/answered/${userId}/${questionId}`;
+      const path = process.env.VUE_APP_API_URL + `/api/user/questions/answered/${userId}/${questionId}`;
       axios.get(path)
         .then((res) => {
           if (res.data.questions_answered
@@ -333,7 +333,7 @@ export default {
         question_id: this.id,
         is_correct: isCorrect,
       };
-      const path = '/api/user/questions/answered/add';
+      const path = process.env.VUE_APP_API_URL + '/api/user/questions/answered/add';
       axios.post(path, payload)
         .then(() => {
         })

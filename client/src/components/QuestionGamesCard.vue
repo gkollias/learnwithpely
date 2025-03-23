@@ -107,7 +107,7 @@ export default {
       return this.questions[0] ? this.questions[0].question : 'empty';
     },
     getQuestions() {
-      const path = '/api/questions/filter';
+      const path = process.env.VUE_APP_API_URL + '/api/questions/filter';
       const multiplicationGameParams = {
         class_id: 2,
         category_id: 2,
@@ -148,7 +148,7 @@ export default {
       return 'Δεν υπάρχουν ερωτήσεις για αυτό το παιχνίδι.';
     },
     getQuestionGames() {
-      const path = '/api/questionGames';
+      const path = process.env.VUE_APP_API_URL + '/api/questionGames';
       axios.get(path)
         .then((res) => {
           res.data.question_games.splice(0, 0, { id: 0, name: 'Παρακαλώ επιλέξτε ένα παιχνίδι' });
