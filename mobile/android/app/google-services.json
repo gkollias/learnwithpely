@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "212895906741",
+    "project_id": "learn-with-me-pely",
+    "storage_bucket": "learn-with-me-pely.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:212895906741:android:e3c0001dca289d876d37fc",
+        "android_client_info": {
+          "package_name": "com.learnwithme.gkollias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "212895906741-sh65920ispaii5o3oji0lahpmff2j59k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.learnwithme.gkollias",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "212895906741-tpk3u8t73knojas429s1lvoq76glsvtq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1KTrlU2-6oWcMBz2gFB1yxcd5jLEI7-8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "212895906741-tpk3u8t73knojas429s1lvoq76glsvtq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "212895906741-ide8pi6oshm9jedqmve5iel1qbduhe7u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.learnwithme.gkollias"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
